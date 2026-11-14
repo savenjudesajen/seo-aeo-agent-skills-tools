@@ -1,0 +1,51 @@
+{"skill_name": "competitor-comparison-page-template", "evals": [
+  {"id": 1,
+   "prompt": "Lingofox (a fictional language-learning app at example.com) has one comparison page live, example.com/compare/lingofox-vs-competitora, and plans more. What should our one-rival comparison pages look like? Keep it short.",
+   "expected_output": "A two-section Word doc built with data/lean_doc.py: a page-order table with the 12 standard rows (plus a Cut row only if a live block should go), each with a status measured against the live page and an action of 30 words or fewer, then the same rows as screenshot bands mixing Lingofox's own captured sections with vendor patterns from the benchmark library, each with a short caption and a Source line.",
+   "files": [],
+   "expectations": [
+     "Audits the live page in a real browser before assigning statuses, and reads every heading, label and rating it will describe on the page itself",
+     "Uses exactly two sections (Page order, Screenshots in page order) with no wireframes, CMS model or appendix",
+     "Every row has a number, name, status from Keep, Rework, Add or Remove, and an action of 30 words or fewer",
+     "Each screenshot row mixes a Lingofox capture (where the section exists) with one or two patterns chosen via the site index, tagged with site and kind",
+     "Captions are 30 words or fewer, say only what the crop shows, and carry a Source line with domain/path and month and year",
+     "Runs the lean_doc.py lint and copy scan and reports a clean result, 5 to 9 pages, about 900 to 1,300 words",
+     "Recommends one button label across all pages"
+   ]},
+  {"id": 2,
+   "prompt": "We're launching vs pages for TicketNest (fictional event-ticketing platform, tickets.example). We don't have any comparison pages yet. Can you give me the recommended structure? Our main rival doesn't publish pricing but marketing wants a price row anyway.",
+   "expected_output": "A lean two-section doc where every row is Add, there are no company captures, the basis line says no comparison pages exist yet, every row shows two benchmark patterns, and the pricing row explains how each vendor charges with the rival cell reading Pricing not published plus the date checked.",
+   "files": [],
+   "expectations": [
+     "Marks every row Add and says in the basis line that no comparison pages exist yet",
+     "Shows two patterns per row because there is no company section to capture",
+     "Refuses to state a price the rival does not publish and recommends 'Pricing not published' with the date checked",
+     "Picks vendor patterns from the benchmark library and, for trust blocks no vendor page shows, an independent review page in an unrelated category",
+     "Confirms each pattern page is still live before capturing it",
+     "Does not add wireframes, CMS fields or build checks unless asked"
+   ]},
+  {"id": 3,
+   "prompt": "I need the full comparison page template doc for Pawsure (a fictional pet-insurance brand on example.org): wireframes, the CMS fields, build checks, everything. Use your benchmark plus their three main rivals.",
+   "expected_output": "The extended build: a private client set of the rivals' vs pages re-coded against the 50 section types, the packed 26-block model with statuses re-decided against Pawsure's site, wireframes from wire_vs.py, a content spec built from extended_spec_example.py rendered with build_extended_doc.py, the matrix-to-rows mapping, a rival-category table, navigation and URL rules, CMS fields, build checks, a copy-gate pass and a reply draft that is not sent.",
+   "files": [],
+   "expectations": [
+     "Treats this as the extended build because the user asked for the full template by name",
+     "Builds the client set from the rivals' own vs pages privately and re-codes it against the same section type ids, keeping counts with stated bases",
+     "Every type lands in a block or has a 'Not used' reason, and every named example is asserted to be in its set",
+     "Maps Pawsure's existing comparison content to a fixed row set with a Best for row first, a row the rival leads and How it is bought last, each compared row with a Leads tag",
+     "Recommends a byline with a named reviewer, a disclosure line, dated numbered sources and a change log",
+     "Runs qc_copy.py and views every rendered page before delivery",
+     "Drafts a short reply with counts but never sends it without an explicit yes"
+   ]},
+  {"id": 4,
+   "prompt": "Quick check on our draft vs page for Rivetly (a fictional CRM for florists, example.net): the page claims we're rated higher than CompetitorA on a review site and the table is all ticks. What would you change?",
+   "expected_output": "Specific Rework actions: replace the tick grid with one plain sentence per cell on the same rows used on every page with a Leads tag including a row the rival leads; show review-site scores for both vendors with site, review count and date or none at all; add an as-of date and source; check the footnote for what the rating actually compares.",
+   "files": [],
+   "expectations": [
+     "Recommends sentences in table cells instead of ticks, with the same rows on every page",
+     "Requires review-site ratings for both vendors with source, review count and date, or none at all",
+     "Asks for a dated, numbered source and checks any footnote for what the number is measured against",
+     "Suggests conceding at least one row or round to the rival",
+     "Bases every statement about the draft page on what was read on the page itself"
+   ]}
+]}

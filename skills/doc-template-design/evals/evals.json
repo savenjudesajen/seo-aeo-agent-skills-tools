@@ -1,0 +1,48 @@
+{"skill_name": "doc-template-design", "evals": [
+  {"id": 1,
+   "prompt": "Write up the website accessibility findings for Tidewater Kayak Rentals (a fictional business, tidewaterkayaks.example) as a Word doc in their brand colours. There are 14 findings: 5 high, 6 medium, 3 low, each with a screenshot. We've never made a document for them before.",
+   "expected_output": "The agent identifies the client, finds no saved theme, probes the homepage and one content page with brand_probe.js and dump_probe.js, builds a theme proposal with theme_from_probe.py, previews it with showcase.py and the gates, names any substituted font, and waits for the user's yes before confirming the theme and building a long recommendation document: a summary section with a prioritised change table, numbered sections by severity, one subsection per finding with a status chip, the screenshot as a figure and a fact table, then DOCX CHECK PASS (and LAYOUT PASS / THEME PASS when LibreOffice is available).",
+   "files": [],
+   "expectations": [
+     "Probes the live site in a browser (homepage plus a content page) instead of guessing colours",
+     "Produces a theme proposal with evidence for each colour and font and names any licensed font that was replaced by an open family",
+     "Shows a preview and asks for confirmation before using the theme for the real document",
+     "Uses the long recommendation pattern: summary change table, numbered sections, subsections with status chips, figures with captions and sources",
+     "Runs check_docx.py with the theme and reports DOCX CHECK PASS; runs or explicitly offers the render checks",
+     "Does not embed the client's own web font files"
+   ]},
+  {"id": 2,
+   "prompt": "I need a one-page doc for the front-desk manager at Northgate Climbing Gym (a fictional business, northgateclimbing.example). Their website contact form still sends to an inbox nobody reads; they need to switch it to the new shared inbox, test it, and decide whether to keep the old address as a backup. Plain and professional, no special branding.",
+   "expected_output": "The agent uses the neutral default theme and the short action doc pattern: a one-line title stating the request, a meta line, a two- or three-sentence lead with the reason and the date needed, then numbered sections (Context as a short paragraph, Tasks as a table with Task, Owner and Check columns, Decision as a fact table with the recommendation, the alternative, the trade-off and a decide-by date, If something blocks you as bullets, After you finish as a numbered list). It builds with doctemplate.py, runs check_docx.py and reports DOCX CHECK PASS, and names the file Northgate_Contact_Form_Switch.docx or similar.",
+   "files": [],
+   "expectations": [
+     "Uses the neutral default theme without probing any site",
+     "Follows the short action doc pattern with numbered sections and a task table that names an owner role and a check for each task",
+     "Puts the backup-inbox choice in a Decision fact table with a recommendation and a decide-by date",
+     "States the request in the title and lead, with why it matters and when it is needed",
+     "Leaves no placeholder text such as TODO, XX or bracketed fields in the document",
+     "Runs check_docx.py and reports DOCX CHECK PASS before presenting the file",
+     "Does not add a personal email address to the meta line"
+   ]},
+  {"id": 3,
+   "prompt": "Here's Copperline Coffee Roasters' Word template (copperline_template.docx; a fictional business, copperlinecoffee.example). Can you turn my content audit notes into a document that uses it? They're picky about their template.",
+   "expected_output": "The agent does not rebuild the template with the generator. It copies the template, inventories its styles and repeated blocks, fills a copy in place using the template's own styles and example blocks (python-docx or XML editing), deletes the sample text, introduces no new colours, fonts or blocks, and gates the result with check_docx.py --adopted plus a page-by-page comparison against the original (render audit when LibreOffice is available).",
+   "files": ["copperline_template.docx"],
+   "expectations": [
+     "Uses the client's own template file rather than the neutral layout or a probed theme",
+     "Works on a copy and leaves the original template untouched",
+     "Uses the template's existing styles and repeated blocks instead of inventing new ones",
+     "Removes the template's sample text",
+     "Runs check_docx.py with --adopted and compares the pages against the original template"
+   ]},
+  {"id": 4,
+   "prompt": "Make the local search plan doc for Fieldstone Agency's client Larkfield Music School (both fictional: fieldstone-agency.example and larkfieldmusic.example). Use the right branding.",
+   "expected_output": "Two candidate brands are named (an agency and its end client) and no saved theme settles it, so the agent asks which look to use, offering the agency, the end client and the neutral default, instead of guessing. If the end client's brand is chosen, the meta line reads 'Prepared for Fieldstone Agency'.",
+   "files": [],
+   "expectations": [
+     "Asks the user which brand to use, listing both candidates and the neutral default, before building",
+     "Does not pick a brand on its own when two candidates exist",
+     "When the end client's theme is used for work delivered to the agency, sets the meta line to 'Prepared for' the agency",
+     "If the chosen site cannot be read in the browser, stops and asks for brand guidelines or hex codes rather than inventing colours"
+   ]}
+]}

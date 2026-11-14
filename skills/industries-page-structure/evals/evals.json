@@ -1,0 +1,46 @@
+{
+  "skill_name": "industries-page-structure",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our client Beamtrellis (beamtrellis.example.com) sells project-management software for construction firms. Their top-level Industries menu lists about twenty industries, most of them linking to near-empty pages, and /industries is just a list of names. The designer wants a reference for a proper industries overview page, a template for the industry pages, and advice on what to do with the menu. Competitors are CompetitorA and CompetitorB. Can you put together the structure doc?",
+      "expected_output": "A .docx recommendation built from the coded cross-industry set plus the client's competitors and category leaders: a launch set cut to the industries with demand and proof, what happens to the other pages (merge, redirect or keep as drafts), the overview blocks in page order with a status set against the client's site, counts with their base and best examples, an industry page template, menu, footer, URL and redirect rules, CMS fields, build checks, wireframes, and a short reply draft for the designer that is not sent.",
+      "files": [],
+      "expectations": [
+        "Inventories the client's site first (menu, footer, sitemap, the existing industry pages and what each holds, proof, button labels) and checks any statistic the client shows against its source",
+        "Scores the existing industries on competitor coverage, demand and client proof, keeps four to six for launch and says what happens to each of the others (merge, 301 to the overview or nearest page, or wait as a draft)",
+        "Codes the competitors and category leaders against the same 45 type ids as the cross-industry set and counts menus and footers on the client set only",
+        "Every count names its base (menus, overview pages or industry pages) and every best-example company is in the set it illustrates",
+        "Every section type lands in a block or carries a Not used reason, and every block gets a status of Keep, New, Rework, Optional or Later set against the client's current pages",
+        "Advises on the top-level Industries item against the length of the launch list (top-level for long lists, a By industry group under Solutions for short ones), an Industries footer group, an All industries link, plain slugs and the parent address live on launch day",
+        "Runs benchmark.py and qc_copy.py and reports their results, and drafts the reply without sending it"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "We're a translation and localization agency (phrasequarry.example.com) and want to add pages for the industries we serve: life sciences, legal, gaming, e-commerce, manufacturing and government. Which ones should we launch first, and what should each industry page contain?",
+      "expected_output": "A launch-set recommendation scored on competitor coverage, monthly demand for '<industry> translation' style terms and the proof the agency holds per industry, with four to six launch industries and the next ones named, plus the industry page template block by block (hero answer naming buyer types, point of view, figures with source and date, priorities with matching resources, capabilities, regulations confirmed by the client, proof, research row, FAQ, reviewer line, closing band with sibling industries).",
+      "files": [],
+      "expectations": [
+        "Scores each candidate industry on competitor coverage, search demand and the client's proof, and says plainly when demand for niche pairings is near zero",
+        "Names the next industries to add and what each needs before it launches",
+        "Gives the industry page template in page order with its starter counts, and a status per block set against the agency's current site rather than a preset one",
+        "Limits regulation or certification copy to what the client confirms",
+        "Includes fallbacks for launch (a page with no industry proof hides the proof block, at least three FAQ answers)"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Here's the Figma for the new industries hub of an industrial adhesives maker (tackmeadow.example.com): a hero, a carousel that shows one industry at a time, a logo strip and a contact form. The team wants feedback before it goes to the developer. Keep it short, but tell us what's missing and what to change.",
+      "expected_output": "A gap review of the current design against the overview block model: what already works, then the changes ranked by impact, each backed by a count from the benchmark with its base and a named best example (for example: replace the carousel with open, anchored industry cards; add a coverage line and a one-line value statement per card; add per-industry answer blocks that each carry one sourced, dated figure; add an FAQ and a Reviewed by line; move from a logo strip to proof with results), with mobile notes and build checks for search and AI answers.",
+      "files": [],
+      "expectations": [
+        "Flags the one-at-a-time carousel as hiding industries from readers and crawlers and recommends open, anchored blocks",
+        "Flags the logo strip as weak evidence and recommends proof with results or quotes",
+        "Backs each change with a count from the starter set with its base, without quoting copy from the benchmark pages",
+        "Names gaps no page in the starter set fills (a named reviewer and review date, sourced figures on the overview) as open ground",
+        "Includes mobile behaviour and the build checks (live text, structured data, lists in step, empty states)"
+      ]
+    }
+  ]
+}

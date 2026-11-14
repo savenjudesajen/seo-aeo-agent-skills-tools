@@ -1,0 +1,59 @@
+{
+  "skill_name": "aeo-scorecard-lead-gen-engine",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We want to run an AI-search scorecard lead magnet for a list of 12 regional commercial cleaning companies (the first is Brightway Cleaning at brightway.example.com, main rivals sparkpro.example.net and cleanline.example.org). Set up the master tracking sheet and run the first account end to end: score, landing page copy, ad hooks and the cold sequence.",
+      "expected_output": "A master sheet with one row per account (identity, competitors, 7 pillar columns, auto composite, auto ad headline, delivery, ops and CRM columns, controlled values), and for the first account: 10 to 15 buyer prompts written from its own positioning, a URL inventory taken before scoring, probes for the brand and each competitor with a leaderboard, 7 pillar scores each tied to one piece of evidence, a causal-chain diagnosis, 3 plays, a 9-section external scorecard plus an internal view, plain-English pillar labels, A/B ad hooks and a 7-touch cold cadence as import-ready files.",
+      "files": [],
+      "expectations": [
+        "Writes the buyer prompts from the account's own homepage positioning, including a generic category prompt and one very local control prompt",
+        "Maps the site's URL inventory before assigning any pillar score",
+        "Probes each competitor separately and picks the hook competitor as the one leading the leaderboard",
+        "Every pillar score names a specific piece of evidence; anything unevidenced is marked pending",
+        "Uses plain-English pillar labels on the prospect-facing page and keeps technical names for the internal view",
+        "The composite and ad headline in the sheet are built by formula, and qa_passed is left for a human"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "The scorecard for a boutique architecture practice at studio.example.com came back with a composite of 0 and every pillar at 0, and one of the three AI engines errored out on every prompt. Can we still send the landing page to them today?",
+      "expected_output": "Treats the all-zero result as a broken run, not proof of invisibility, and re-runs it; reports only the engines that ran and excludes the failed engine from the counts instead of averaging over it; states the sample honestly (N prompts on M engines); holds the page back until the quality gate (identity, zero, hook, human read, no placeholders) passes.",
+      "files": [],
+      "expectations": [
+        "Says a composite of 0 with all pillars at 0 is a broken run and re-runs before shipping",
+        "Excludes the failed engine from the counts and names which engines ran",
+        "Checks the brand identity and competitor set before re-running",
+        "Doesn't send anything to the prospect until the quality gate passes, including hiding any empty case-study block"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "A hospitality consultancy wants LinkedIn ads for its AI-search scorecard aimed at 15 boutique hotel groups across three countries, most with a small head office. Build the campaign in Campaign Manager and get it running.",
+      "expected_output": "Explains the audience math first (LinkedIn's roughly 300-member floor and roughly 50,000 recommendation; 15 small head offices will likely be thin), recommends outbound sequences as the primary 1:1 channel with paid as support, pools all 15 into one matched-company audience uploaded by domain, builds the campaign and ad set only as a draft with expansion off, uses a generic creative for the pooled audience, and surfaces the Company Page posting permission and the launch decision to the client instead of performing them.",
+      "files": [],
+      "expectations": [
+        "Checks the audience size against LinkedIn's minimum before promising a paid launch",
+        "Recommends cold email plus CRM nurture as the primary channel for a small named-account list",
+        "Builds the campaign as a draft only and never clicks launch or publish",
+        "Matches companies by domain via a list upload rather than relying on name search",
+        "Uses a generic creative for the pooled audience rather than naming one company",
+        "Surfaces the Sponsored Content permission request to the client rather than granting or requesting it itself"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Northwind Tutoring (northwind.example.com) has a scorecard landing page in a Next.js repo owned by the GitHub organisation 'example-web-studio', while the Vercel team that should host it signs in with a different GitHub user. Get the page deployed on that Vercel team and confirm it is live.",
+      "expected_output": "Ports the scorecard copy into the repo's components rather than shipping the static HTML; when project creation fails, reads each error for the next fix (connector write scope, team scope, a GitHub login connection, the Vercel GitHub app); forks the repo into the GitHub user the Vercel team signs in with; triggers the first deploy with a trivial commit; replaces the default 'Create Next App' title and description in app/layout.tsx; and opens the live URL to confirm it renders with the right tab title before propagating the URL to the sheet, ads and sequences.",
+      "files": [],
+      "expectations": [
+        "Treats the static HTML as the spec and deploys the repo",
+        "Forks the repo into the account Vercel is linked to when the owners differ",
+        "Knows that linking a repo doesn't deploy it and triggers a first build with a push",
+        "Replaces the framework's default title and meta description",
+        "Opens the live URL to confirm it renders and the tab title is correct",
+        "Propagates the live URL into the master sheet, ad destinations and every sequence email"
+      ]
+    }
+  ]
+}

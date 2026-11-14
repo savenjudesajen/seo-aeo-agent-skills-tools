@@ -1,0 +1,63 @@
+{
+  "skill_name": "web-screenshot-to-document",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm writing a page recommendation for a garden-tools retailer (gardenkit.example). The brief is brief-gardenkit.docx. For each of the three sections I say they're missing (a size guide, a care-instructions block and a delivery-times table), add a screenshot showing where a competitor does it: example.org/shears, example.net/spades and example.com/hoses. Put each one under its section in the brief.",
+      "expected_output": "Three cropped screenshots captured through the user's browser and saved to disk, the brief's design tokens measured with the extractor, and three figures inserted in place under the matching sections with the inserter, each with a finding-style caption and a dated source line, followed by a render check.",
+      "files": [],
+      "expectations": [
+        "Captures go through a browser that can reach the sites (the user's browser) and are saved as files on disk, not inline-only screenshots",
+        "Overlays such as cookie banners or chat widgets are dismissed before each capture",
+        "Each image is cropped to the section the caption is about, with browser chrome and gutters removed, and its width is checked against the resolution rule",
+        "extract_docx_design.py is run on brief-gardenkit.docx before any figure is placed, and the figure uses the measured grid, borders and caption formatting",
+        "The brief is edited in place with insert_figure.py at anchors under each missing section; the document is not rebuilt",
+        "Captions state a finding ('Figure N. ...'), source lines read 'Source: <domain/path>, <Month YYYY>', and no caption narrates the capture or names a tool",
+        "The document is rendered and each figure is checked for alignment with the tables, legibility, page breaks and figure numbering"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Make a before/after figure for our UX review of a language-learning app's signup page. Before is example.com/signup as it is today; after is the staging mock at example.net/signup-v2. The review doc is ux-review.docx and it has no figures yet. Put them side by side with a 'Signup flow' header row.",
+      "expected_output": "Two captures cropped tighter than a single figure, a two-up banded figure built from the review document's measured tokens (or the neutral defaults if it has no tables to measure, said so), with sub-captions naming each domain, a caption that states the difference, and a render check.",
+      "files": [],
+      "expectations": [
+        "Uses the two-up pattern with one sub-caption per image naming its domain",
+        "Uses the banded pattern with 'Signup flow' as the header row, copying the document's own band if it has one rather than inventing a decorative one",
+        "Crops each image tighter because it renders at about half width, and flags any source narrower than the half-width threshold",
+        "Measures ux-review.docx first; if there is nothing to measure, says the neutral defaults were used and suggests the client's own template",
+        "The caption states the comparison (what changed), not just 'before and after'",
+        "Inserts in place at an anchor and renders the result to check it before presenting"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I need three sharp images of cards from our fitness-class booking app (a monthly bookings chart, an upcoming-classes table and a membership-mix bar) for the hero of our new features page, plus one wide version of the upcoming-classes table for a 1920x1080 slot. The app is open in my browser and I'm signed in. A couple of class rows show real instructor names, and one shows a partner studio's logo.",
+      "expected_output": "Card-by-card captures from an edited clone at 1.5 to 2.3x zoom, a name scan that replaces the real instructor names and the partner logo with neutral sample text and a letter avatar, the chart captured after its animation settles, the virtualized classes table flattened in the clone, margin padding where a capture touches an edge, and a wide capture sized for the 16:9 canvas, with every replaced or reconstructed element reported to the user.",
+      "files": [],
+      "expectations": [
+        "Does not type credentials; works in a fresh tab in the already signed-in session",
+        "Clones each card into an overlay and edits the clone rather than the live page, then zooms the root to between 1.5 and 2.3",
+        "Runs a block-list scan over text, alt, title, aria-label and image src before each capture and gets zero hits after replacing the instructor names and the partner logo",
+        "Replaces the partner logo with a neutral letter avatar and keeps it replaced across re-renders",
+        "Waits for the chart animation to finish (forcing frames with small screenshots) before cloning the chart",
+        "Flattens the virtualized table in the clone (static rows, inline cell widths) and leaves right-hand margin or pads the PNG",
+        "Produces the wide version from a wide clone, reads the saved file's real size, and confirms the export is 1920 by 1080",
+        "Never clicks buttons that change the account (cancel class, refund, book) and closes panels with their own close control rather than a keyboard shortcut",
+        "Tells the user about any neutral sample text, replaced logos or reconstructed chart windows"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "The client wants the competitor screenshots in their Google Doc, not a Word file. Can you just put them in there? The doc is shared with me.",
+      "expected_output": "Explains that python-docx can't edit a live Google Doc, recommends building the figures in a .docx (exported from the Google Doc) with the normal pipeline and having the user import or replace it, and offers driving the Google Docs UI in the browser only as a slower fallback.",
+      "files": [],
+      "expectations": [
+        "States that the .docx pipeline doesn't apply directly to a live Google Doc",
+        "Recommends the .docx route first (export, insert figures in place, re-import) as the deterministic path",
+        "Offers pasting through the Google Docs UI in the user's browser only as a fallback and notes it is slower and brittle",
+        "Keeps the same caption, source-line and no-capture-narration rules whichever route is used"
+      ]
+    }
+  ]
+}

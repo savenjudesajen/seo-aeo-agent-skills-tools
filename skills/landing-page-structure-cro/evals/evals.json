@@ -1,0 +1,59 @@
+{
+  "skill_name": "landing-page-structure-cro",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Lingo Lark is a language-learning app (lingolark.example). Their main landing page at https://lingolark.example/learn feels thin next to the bigger apps. What sections should it have and in what order? Benchmark it against four competitor pages of your choice and give me a Word doc I can hand to their designer.",
+      "expected_output": "A .docx with a cover (positioning, the four competitors benchmarked, a one-line gap summary), Part 1 (a de-duplicated section list in page order with status, competitor attribution and prevalence out of 4), Part 2 (sections sequenced in the six conversion stages with a short reason each, plus a do-first list), Part 2b (only the changes the six conversion principles drove), Part 3 (each current section with a screenshot and a Keep/Rework/Move/Promote verdict), Part 4 (each missing section with a competitor screenshot and source caption) and an appendix of sources and capture date.",
+      "files": [],
+      "expectations": [
+        "Confirms or states assumptions for scope: target URL, audience, the competitor set, format and depth",
+        "Lists the current page's sections top to bottom with the skill's fixed extraction prompt (label, headline, content type, main call to action per section), and uses the same prompt on every competitor page",
+        "De-duplicates competitor sections into section types with prevalence as 'X of 4', names the competitor each type is drawn from, and marks each type's status on the target page with Keep / Rework / Move / Promote / New",
+        "Orders all sections with Capture, Build credibility, Orient, Educate, De-risk, Prove and convert, and bends the template for a software or app page (three-step how it works, a free trial or download as the leading action, ratings as recognition)",
+        "Captures screenshots as files on disk through a browser and crops them, rather than relying on a server-side screenshot URL",
+        "Runs check_deliverable.py until it prints PASS, then renders the .docx to PDF and looks at every page before delivering",
+        "Part 2b shows only the changes the conversion principles drove on this page; it does not paste a checklist"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "We're reworking the product page for a single-origin coffee subscription (https://kettlewick.example/subscribe, brand Kettlewick Beans). Tell me what's missing compared with three other coffee subscription sites and the right order. Keep it to structure, I'll handle the copy.",
+      "expected_output": "A structure recommendation that treats the page as an e-commerce product page: product media, price, plan choice and add-to-cart in Capture; rating summary near the price; delivery, cancellation and guarantees beside the buy button; a reviews module in Prove. Each missing section has a competitor screenshot. No copywriting beyond short messaging notes.",
+      "files": [],
+      "expectations": [
+        "Recognises the page type as e-commerce and applies the e-commerce variant of the stage model",
+        "Applies the e-commerce rows of the stage model: price and add-to-cart visible in Capture, delivery and returns next to the buy button, no costs that appear only later in checkout",
+        "Ranks gaps by prevalence across the three competitors and by fit, and says when fit overrides prevalence",
+        "Keeps the depth to structure plus short messaging notes, and points to a copywriting skill for the copy",
+        "Every screenshot caption names what it shows and its source URL",
+        "Uses none of the banned words (leverage, robust, seamless, genuine, delve, testament, underscore)"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Can you also mock up the recommended redesign for Harborline Coworking (https://harborline.example/workspaces) in their actual look and feel, so the team can click around and comment?",
+      "expected_output": "A plan and build of a self-contained HTML mockup in the site's own design system: tokens extracted from the live DOM with probe.js (numbers and hex only, stored on window.__SPEC and read back in chunks), a measured and self-hosted font, section 1 built and passed through both the metrics gate and the visual gate before scaling, the remaining sections in the Part 2 order with placeholder content marked illustrative, all fonts and images inlined, and an optional hosted preview for comments.",
+      "files": [],
+      "expectations": [
+        "Extracts design tokens from the live DOM instead of estimating them from a screenshot",
+        "Renders the mock at the live page's real viewport width",
+        "Measures the rendered font with canvas measureText and self-hosts the matching font as base64 @font-face",
+        "Builds section 1 first and does not scale until metrics_parity.py and visual_parity.py both pass",
+        "Marks placeholder logos, metrics and testimonials as illustrative",
+        "Delivers one self-contained HTML file with fonts and images inlined"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Do a quick page teardown of https://www.example.org/pricing-tool for a bike-repair franchise and add screenshots of each section. No browser extension is connected in this session.",
+      "expected_output": "The agent can do the fast text steps (section inventory, competitor inventory, de-duplication) but stops before the capture step, tells the user that no browser able to save screenshots to disk is connected, and lists the options from the Tools section instead of substituting unembeddable screenshot URLs or skipping the screenshots silently.",
+      "files": [],
+      "expectations": [
+        "Tells the user which capability is missing (a browser that saves captures to disk) and the options under Tools",
+        "Does not present server-side screenshot URLs as embedded images",
+        "Does not mark the deliverable done without a screenshot and verdict for every current section"
+      ]
+    }
+  ]
+}

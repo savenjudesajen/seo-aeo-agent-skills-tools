@@ -1,0 +1,56 @@
+{"skill_name": "aeo-keyword-research-and-prompt-simulation", "evals": [
+  {"id": 1,
+   "prompt": "Kilnworks (kilnworks.example.com) makes electric kilns and studio equipment for pottery schools and production ceramic studios. Do AEO keyword research for their studio-kiln line and give me a prompt set we can track in our prompt-tracking tool. We have their Search Console connected. I want a Prompt Map and a Keyword Map, nothing else.",
+   "expected_output": "A Step 0 Scope Map and boundary sentence before any keyword; Search Console pulled first as narrow theme regexes with brand and non-brand split; an anchor confirmed on the category surface; the seed chain and recirculation loop run to closure with the lap count; traps and the product-fit gate applied; keywords clustered on shared top-10 URLs into pages; then a gated two-sheet workbook (Prompt Map with tracked rows only, Keyword Map) and the run_gates.py verdict line.",
+   "files": [],
+   "expectations": [
+     "Builds a Scope Map with T1/T2 tiers and writes a scope boundary sentence and a brand regex before sizing any keyword",
+     "Runs Search Console first as several narrow regexes over 16 months and labels every row BRAND or NON-BRAND before using it",
+     "Anchors the category on an analyst or review category surface (or explains why it cannot) instead of organic-overlap competitor tools",
+     "Runs the recirculation loop until a lap finds nothing new and records the lap count",
+     "Does not cut any keyword only because its SERP is informational or its volume is low",
+     "Derives pages from SERP clustering on shared top-10 URLs and writes titles from the head keyword and its SERP, not from a prompt",
+     "Does not start writing prompts until the keyword set is final",
+     "Every Prompt Map row carries answer type, need, KPI, stage, play, wave, form, family, basis, fan-out block and mapped keywords",
+     "Ships only the two sheets asked for (at most one extra) and reports the run_gates.py verdict line"
+   ]},
+  {"id": 2,
+   "prompt": "Pawsteady is a consumer dog-training app (pawsteady.example). There's no G2 or analyst category for it. Build the prompt universe for its puppy-training feature and give me a quick baseline of how often ChatGPT, Perplexity and Gemini mention Pawsteady versus two rival apps, CompetitorB and CompetitorC.",
+   "expected_output": "Uses the engines' own answer surface as the category anchor, harvests observed question data before simulating, labels simulated rows with family and reason, tags NB as the default form, runs the baseline across the engines one prompt at a time, computes share of voice over all non-branded prompts as a ranked scoreboard, labels the engine count and marks the first read directional.",
+   "files": [],
+   "expectations": [
+     "Uses the consumer category-anchor procedure (engines' answer surface) and does not fall back to organic-overlap competitors",
+     "Harvests real question data (People Also Ask, question tools, Search Console long tail) before simulating, and labels every simulated row",
+     "Most prompts are non-branded (NB form), with OWN rows within budget",
+     "Re-scores plays from mention hits per prompt across engines (all engines Defend, some Strengthen, none Capture)",
+     "Computes share of voice across all relevant non-branded prompts, excluding branded prompts, as a ranked table",
+     "Labels the engine count on every visibility figure and calls the first read single-run / directional",
+     "Does not publish a visibility tool's position or sentiment field without checking what it means"
+   ]},
+  {"id": 3,
+   "prompt": "Tidemark (tidemark.example) runs boat-storage marinas. Tidemark's marketing manager sent back the Prompt Map workbook with comments, and may have edited some cells directly. Work through the feedback and return an updated workbook with a note on what changed.",
+   "expected_output": "Reads the whole round before editing (review_round.py with --returned and --previous): every comment, every message of every thread, and every uncommented edit or column change. Applies each comment by its kind from the reviewer-round action table (SWAP takes the reviewer's wording exactly and reruns the gates on it; REWORD cuts only the named phrase; REMOVE takes the page and its prompts out of the tracked set and keeps its keywords as KEYWORD ONLY rows; a question-shaped comment is read with the rest of its thread). Carries or declines each uncommented edit (for example a changed content type, which re-runs that page's page check). Works in the returned file, keeps the reviewer's column order, adds a Reviewer decision column, and passes run_gates.py with --returned and --previous.",
+   "files": [],
+   "expectations": [
+     "Runs the review reader before changing any cell and lists every comment and every message in each thread",
+     "Finds the edits made without a comment by diffing against the last file sent, and carries or declines each one in the reply",
+     "When an uncommented edit changes a page's content type, recomputes that page's page check and flags rows the new type cannot answer",
+     "Applies a SWAP comment as the reviewer's exact wording and gives the new row its family and reason",
+     "Treats a wording comment as a pattern and lists the other rows it could apply to rather than silently editing one cell",
+     "On a REMOVE, takes the page's prompts out of the tracked set and keeps its keywords on the Keyword Map as KEYWORD ONLY rows",
+     "Edits the returned workbook in place, keeping the reviewer's column order, and adds a Reviewer decision column quoting each message with what was done",
+     "Runs run_gates.py with --returned and --previous and reports the verdict"
+   ]},
+  {"id": 4,
+   "prompt": "Here's a CSV of 60 prompts written for the help-centre articles on mowbot.example (a robot lawnmower brand). Please load them into the prompt tracker under the tag 'Help hub' so their visibility can be followed over time.",
+   "expected_output": "Treats it as a load-only ask: loads the supplied list as given under the one named tag, keeps any grouping in a column rather than extra tags, runs a short script check on the list and reports rows that break the prompt rules (outside the length bounds, a dangling pronoun that only works as a follow-up turn, duplicates) for the user to decide instead of rewriting them, skips the workbook gates with the reason stated, and offers further layers rather than building them.",
+   "files": [],
+   "expectations": [
+     "Loads the 60 supplied prompts as given and does not add, expand or silently reword any",
+     "Uses only the 'Help hub' tag for the whole list",
+     "Flags a row such as 'is it waterproof?' as a dangling-pronoun follow-up and any row outside the length bounds, and asks the user rather than rewriting them",
+     "Reports exact and near-duplicate prompts in the list",
+     "States that run_gates.py was skipped because no Prompt Map exists",
+     "Builds no fan-out blocks, Prompt Map or tracking sheet unless asked, and offers them instead"
+   ]}
+]}

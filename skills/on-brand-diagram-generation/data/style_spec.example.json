@@ -1,0 +1,36 @@
+{
+  "_README": "COPY this to style_spec.json and re-point every field at the CURRENT brand. Nothing here is a default to trust: derive each value from the brand's OWN published assets in Phase A. The palette below is a deliberately synthetic placeholder (pure greys plus one stock blue), not a real brand.",
+  "client": "ExampleBrand (example.com)",
+  "approved_palette": [
+    "#FFFFFF",
+    "#333333",
+    "#777777",
+    "#DDDDDD",
+    "#0066CC"
+  ],
+  "palette_tolerance": 6,
+  "target_ratio": "16:9",
+  "ratio_tolerance": 0.02,
+  "require_title_desc": true,
+  "required_ids": ["brand-logo"],
+  "allow_extra_accent_colors": [],
+  "palette_roles": {
+    "canvas": "<sampled background hex of their diagrams>",
+    "box_stroke_primary": "<their box outline hex and stroke weight>",
+    "heading_text": "<label hex; note font family and weight>",
+    "body_text": "<secondary label hex>",
+    "divider": "<divider / frame hex>",
+    "accent": "<the accent hex(es) they actually use, and what for>"
+  },
+  "style_notes": {
+    "corners": "<sharp, or the radius you measured>",
+    "fills": "<outline-only, tinted or solid fills; shadows or none>",
+    "connectors": "<stroke weight, arrowhead, what solid vs dashed means>",
+    "typography": "<family, weights, case, alignment>",
+    "density": "<typical node count per canvas, whitespace>"
+  },
+  "derivation_evidence": [
+    "https://www.example.com/uploads/reference-diagram-1.png",
+    "https://www.example.com/uploads/reference-diagram-2.png"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "skill_name": "migration-mode-seo-recommendations-and-redirect-plan",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "A bicycle-components retailer (call it ExampleBikes) is moving from its old CMS at example.com to a headless build at example.org in about four months. Their developer says the new site is only on staging, so there's nothing for SEO to audit yet. They just want to 'not lose rankings'. What should the engagement deliver and where do I start?",
+      "expected_output": "Rejects the 'nothing to audit' framing: the legacy site at example.com is audited as evidence, the new site gets a build spec, and the move gets a phased plan. Starts with Phase 0 (tool-liveness probe, Search Console and GA4 access as the critical path, confirm the new domain, ask what already redirects, request the planned page list in writing), then a whole-domain legacy crawl with subdomain hunting, redirect-destination and meta-robots checks, a traffic-model classification, and a staged redirect map sourced from crawl, Search Console, GA4 and backlinks. Deliverables: a recommendations deck in the client's template plus a Technical + Migration workbook and a Content Plan workbook.",
+      "files": [],
+      "expectations": [
+        "States that the legacy site is audited, the new site is recommended (spec) and the move is planned (checklist)",
+        "Treats Search Console and GA4 access as the critical path and suggests a provisional crawl-based map meanwhile",
+        "Requires crawling all subdomains and actively hunting for them (DNS, certificate-transparency logs, analytics hostnames), not trusting the client's list",
+        "Requires following every existing redirect to its final destination and checking that destination's meta robots",
+        "Says the redirect map is the union of crawl, Search Console, GA4 and backlink targets, never crawl alone",
+        "Asks the client for their planned page list in writing because redirect destinations depend on it",
+        "Names the deck plus two workbooks as the deliverables and keeps the 'recommendations not audit' framing off the slides"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Here is our draft redirect map for a board-game publisher renaming from OldBrand Games (example.com) to NewBrand Games (example.org). The new product pages won't exist until a month after launch, so we've put 302s on those. A few old blog posts with no equivalent go to the homepage, and staging.example.com is in the list with a 301 to the new homepage. Can you check it's ready?",
+      "expected_output": "Applies the staged model: 302s are acceptable only as tracked placeholders with Redirect status 'Awaiting build' and a final type of 301; staging hosts are excluded, never migrated; deep URLs with no equivalent should go to the closest relevant parent or a deliberate 410, not in bulk to the homepage; no chains (map straight to the final URL); every legacy URL carries a decision. Runs data/check_redirect_map.py on the CSV export, lists the findings to fix, and notes that a --final run must be clean before cutover. Also raises the entity layer (alternateName/sameAs, 'formerly OldBrand Games' bridging) and old-domain retention as a sign-off decision, since a rename is not carried by redirects alone.",
+      "files": [],
+      "expectations": [
+        "Runs or instructs running data/check_redirect_map.py on the redirect map export before calling it ready",
+        "Requires every 302 to be a tracked placeholder (Redirect status column) that flips to 301 on release",
+        "Marks the staging host as Exclude rather than redirecting it",
+        "Rejects bulk homepage redirects as soft-404 risk and proposes the closest relevant page or a deliberate 410",
+        "Checks for chains and loops and maps each legacy URL to its final destination in one hop",
+        "Raises the entity layer for the rename (alternateName and sameAs schema, on-page 'formerly' bridging) as separate from URL redirects",
+        "Puts keeping the old domain renewing and redirecting on its own decision slide with an owner"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "A marine-electronics distributor is replatforming, and the client doubts that content can work in their category. I exported top pages for ten competitors from our SEO tool and the homepage dominates on most of them. Can you put together the competitor section of the deck so it answers that doubt?",
+      "expected_output": "Doesn't answer from the top-pages data alone: a top-pages export shows how traffic is distributed, not what sites rank for or whether demand exists. Requires an organic rankings (positions) export for every comparator, a brand vs non-brand split weighted by traffic (with misspellings and former names in the brand tokens), a service-relevant non-brand target list above a volume floor, and a hunt for the exception competitor with real non-brand traffic. Only if demand is genuinely near zero and every direct competitor is brand-concentrated is 'brand dependence' a category trait; otherwise the section shows that the demand exists and most competitors haven't built for it, with a case-study slide for the exception. Keeps to four slides at most (landscape, Pareto, exception, where the demand is) with the rest in the workbook. Copy is written in a declarative consulting register without drama.",
+      "files": [],
+      "expectations": [
+        "Refuses to infer category search-market size from a top-pages export alone",
+        "Requires organic rankings / positions exports for every competitor before any demand claim",
+        "Computes non-brand share of traffic per competitor, weighted by traffic not keyword count, with misspellings and former names counted as brand",
+        "Builds an evidenced non-brand target list filtered to the client's service and states that every row is demand a competitor already proves",
+        "Looks for the exception competitor and proposes a case-study slide if one exists",
+        "Reads the Pareto together with the brand split (pages to 50/80/90% and homepage share), keeping direct and indirect sets separate",
+        "Writes any slide copy without meta-commentary, second person to the reviewer or dramatic phrasing"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "The migration deck for a university press bookshop is basically done. The client finally sent their planned page list last week, so I added a schema section and a regional-store pages section in the middle. Anything to check before I send it to the client?",
+      "expected_output": "Runs data/dedupe_audit.py on the .pptx and fixes every finding: repeated tables or paragraphs across slides, near-duplicate slides from additive editing, and stale status text that still says the page list is pending or that destinations are provisional now that the list has arrived (searching the deck for that blocker, beyond the script's built-in patterns). Resolves duplicates by deleting the weaker slide, repurposing it into something distinct, or splitting by altitude, with deletions as the last operation before save in the build script chain. Also renders the deck to PNG and looks at it, checks tables for unused trailing columns, keeps placeholders deliberate ('N of M URLs mapped', '[DATE]'), with no judged score out of 100, moves mechanics into presenter notes, and labels any single-run AI-visibility reads as directional.",
+      "files": [],
+      "expectations": [
+        "Runs data/dedupe_audit.py and treats a non-zero exit as blocking",
+        "Searches the deck for stale status text about the cleared blocker (page list pending, destinations provisional) and updates the redirect-map slide and sheet now that destinations can be confirmed",
+        "Treats added slides as a merge, not an append, and resolves duplicates by delete, repurpose or split by altitude",
+        "Keeps deletions as the last operation before save and rebuilds from the script chain rather than hand-editing the binary",
+        "Renders to PDF/PNG and visually checks for overflow and unused trailing table columns",
+        "Moves working notes and caveats to presenter notes and keeps placeholders looking like fields awaiting data",
+        "Labels single-run AI visibility results as directional"
+      ]
+    }
+  ]
+}

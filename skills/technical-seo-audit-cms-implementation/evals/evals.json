@@ -1,0 +1,50 @@
+{"skill_name": "technical-seo-audit-cms-implementation", "evals": [
+  {
+    "id": 1,
+    "prompt": "Here's the finished technical SEO audit workbook for shop.example, an online bicycle-parts store running Drupal 11. I'm logged into the admin in Chrome. Please fix all the 'Meta Description - Missing' rows directly in the CMS.",
+    "expected_output": "The agent splits the audit into developer vs in-house items and confirms the split, orders the missing-meta worklist by Search Console impressions, applies the clarity gate (scrape and keyword research before writing copy for unclear pages), finds node IDs, edits the Metatag description on the real rendered node form and clicks the genuine Save, tests about 3 rows live and stops for approval, then bulk-applies with live cache-busted verification and writes final value and Implemented columns back to the workbook per batch.",
+    "files": [],
+    "expectations": [
+      "Separates developer items (redirects, compression, hreflang, headers) from in-house CMS items and confirms the split with the user before editing",
+      "Asks for or uses Search Console page traffic to order the worklist, highest impressions first",
+      "Marks each worklist row confident or needs-scrape and leaves needs-scrape rows unimplemented until the page is scraped and keyword research is done",
+      "Explains that 'missing' metas on Drupal are often an empty-resolving Metatag token and edits the Metatag description field, not the node title",
+      "Never blind-POSTs the node form; sets the field on the rendered edit form and clicks the real Save button",
+      "Applies only about 3 test rows, shows the live result with proof the body content survived, and waits for approval before bulk",
+      "Verifies each row by fetching the live page with a cache-busting parameter and checking page size and H1",
+      "Writes the final value and an Implemented column back to the audit workbook per batch, not at the end",
+      "Does not enter credentials or log in on the user's behalf"
+    ]
+  },
+  {
+    "id": 2,
+    "prompt": "Our cooking-school site example.net runs WordPress with Rank Math and the block editor. 300 posts are flagged 'Page Title Same as H1'. Can you fix them? Also the audit says 900 images are missing alt text.",
+    "expected_output": "The agent prioritises by traffic, treats title same as H1 as not always an error and fixes the highest-traffic posts with distinct titles that share the primary keyword but split secondary terms across title, H1 and meta. Because the site uses Rank Math and the block editor, it maps that plugin's title and description fields on the first post, edits them through the editor's sidebar panel and the real Update button (or WP-CLI if the developer has shell access), never reconstructs the editor's save request, and verifies from front-end HTML. For alt text it first checks whether images live in post content or the theme, routes avatars to the developer, and runs the extract, draft, apply, verify pipeline that PATCHes post_content with a byte-delta assertion on the first post.",
+    "files": [],
+    "expectations": [
+      "Does not blanket-rewrite all 300 titles; prioritises the highest-traffic posts and confirms the scope with the user",
+      "Keeps the primary keyword in title, H1 and meta while splitting secondary terms across the three, with title about 60 characters and meta about 150-160",
+      "Locates the Rank Math title and description fields on the first post instead of assuming another plugin's selectors",
+      "Edits through the block editor's UI and clicks the real Update button (or proposes WP-CLI), rather than reconstructing the save request or assuming SEO plugin meta is REST-writable",
+      "Verifies title and meta from the front-end HTML rather than from REST",
+      "Checks on one image whether the alt lives in post_content or is theme-rendered, and routes author avatars to the developer",
+      "Edits post_content (not media library alt_text) for content images and asserts the byte delta on the first test post",
+      "Uses a time-budgeted, resumable driver that stores its cursor in localStorage for the bulk pass",
+      "Tests a few rows first and gets approval before bulk-applying each item"
+    ]
+  },
+  {
+    "id": 3,
+    "prompt": "We run a multilingual travel-tour operator site, example.org, on WordPress with Polylang in English, Spanish and Italian. The audit flagged duplicate titles in all three languages. Just push the fixes live for everything, all languages, no need to check with me.",
+    "expected_output": "The agent still follows the test-first, per-item approval workflow (explaining why), does the default language first, and treats Spanish and Italian titles as localisation tasks: it flags them or drafts localised copy for sample approval rather than silently machine-translating. It notes the REST posts endpoint returns only the default language and that translations need the language parameter and a separate pass, and it keeps the workbook updated with deferred and implemented statuses.",
+    "files": [],
+    "expectations": [
+      "Explains it will still apply a few test rows and show them before bulk, despite the request to skip checks",
+      "Does the default language (English) first",
+      "Flags non-default-language titles as a localisation task or drafts localised copy for sample approval instead of silently machine-translating",
+      "Notes that the default REST posts listing returns only the default language and translations need a per-language pass",
+      "Records implemented and deferred rows in the audit workbook as it goes",
+      "Confirms CMS revisions are available as a back-out plan before bulk edits"
+    ]
+  }
+]}

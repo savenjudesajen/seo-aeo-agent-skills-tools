@@ -1,0 +1,45 @@
+{
+  "skill_name": "gmb-multi-location-looker-studio-dashboard",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I manage Google Business Profiles for a fictional car-wash chain, Brightrinse (brightrinse.example), with 18 locations across three regions. Build me a Looker Studio dashboard of the last six months of GBP performance, with top search keywords per location for the whole period.",
+      "expected_output": "A plan and build that pulls one bulk Insights export per month from the location group, models a long location x month table, builds the two-page report, and runs all four verification legs, while telling the user up front that keywords are not in any export, only exist per profile for roughly the trailing six months, and that the long tail is masked as <15.",
+      "files": [],
+      "expectations": [
+        "States before building that the bulk Insights export contains no keyword data and keywords must be read per profile from the Performance panel",
+        "Warns that keyword data is capped at about six months and the long tail reads <15, so the branded/non-branded split will skew branded",
+        "Models one row per location x month with impressions = the 4 view columns and interactions = calls + directions + website clicks",
+        "Runs data/verify_totals.py on the long file and does not present the dashboard while it fails",
+        "Checks at least two locations (one large, one small) against the live GBP console by hovering the monthly interactions points",
+        "Tests the date-range filter with a one-month delta and confirms the default opens on the full range"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Stowpoint, a fictional self-storage chain (stowpoint.example), has an existing GBP dashboard in Looker Studio. The next month's numbers need adding, and the Interactions tile reads lower than the GBP overview for a couple of locations. What should happen next?",
+      "expected_output": "Append the new month's rows to the same long sheet instead of rebuilding, re-run the gate and the verification legs for the new month, and explain that the low Interactions number means some locations have messages or bookings that the model dropped: add messages/bookings columns back, re-run the gate, and re-check those locations against the live console.",
+      "files": [],
+      "expectations": [
+        "Appends the new month to the existing sheet rather than rebuilding the report",
+        "Explains that GBP 'Business Profile interactions' includes messages and bookings while the modelled interactions may not",
+        "Adds messages and bookings columns to the long table and recomputes interactions, then re-runs data/verify_totals.py",
+        "Re-verifies the affected locations against the live GBP console tooltips",
+        "Re-runs the verification legs for the new month only"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Add a reviews section to the GBP dashboard for Kettle & Crumb, a fictional 9-cafe chain (kettleandcrumb.example). They want total reviews, an overall star rating and ratings by location, and they want it to respond to the date filter like everything else.",
+      "expected_output": "Explains that reviews are a point-in-time snapshot (no usable time series), scrapes each profile's current rating and count from its knowledge panel, models them in a separate one-row-per-location file with rating_points, shows a review-weighted overall rating labelled as such, and explains why this block does not respond to the date-range control.",
+      "files": [],
+      "expectations": [
+        "Says reviews are not in the bulk export and cannot be date-filtered, so the block is a current snapshot outside the date-range control",
+        "Keeps the reviews data in a separate source instead of merging it into the monthly fact table",
+        "Computes the overall rating as SUM(rating_points) / SUM(review_count) and labels it as weighted (or explicitly as simple if AVG is used)",
+        "Records zero-review profiles as count 0 and rating null",
+        "Does not authorize a new OAuth grant on the client's behalf to connect the file; uses an already-authorized connector or asks the user to do the upload step"
+      ]
+    }
+  ]
+}

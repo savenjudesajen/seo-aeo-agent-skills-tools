@@ -1,0 +1,40 @@
+{
+  "project": "REPLACE_ME",
+  "brand": { "domain": "example.com", "tokens": ["brewnest"] },
+  "competitors": ["rival-one", "rival-two"],
+  "tiers": ["P0", "P1", "P2"],
+
+  "fetch_depth": 20,
+
+  "cluster": {
+    "T": 2,
+    "topn": 10,
+    "one_shared_max_df": 5,
+    "min_serp_urls": 3,
+    "hub_hosts": ["reddit.com", "youtube.com", "wikipedia.org", "linkedin.com"],
+    "never_one_shared_join": ["\\bvs\\b", "\\bversus\\b", "which is better"]
+  },
+
+  "signals": {
+    "a_min_hits": 2,
+    "a_high_confidence_max_rank": 5,
+    "a_max_rank_considered": 10,
+    "near_miss_rank_range": [11, 20]
+  },
+
+  "page_inventory": "audit_pages_lookup.json",
+  "meaning_tokens": ["espresso", "grinder", "portafilter"],
+
+  "_notes": {
+    "brand / competitors": "Replace with the client's domain, brand tokens and competitor names. The example values are placeholders.",
+    "hub_hosts": "Hosts whose pages appear across unrelated SERPs and so never count as 1-shared join evidence. The four defaults are a neutral starting point; tune per category (add the review sites, forums or marketplaces that show up across your corpus). This list is a backstop, not the guard: the df cap is the guard.",
+    "meaning_tokens": "Category terms whose loss or swap in a Google spell correction means the SERP answers a different question. Build them from the client's own keyword set; the values above are for the fictional espresso example only.",
+    "fetch_depth vs cluster.topn": "Store 20, cluster on 10. Widening the clustering window inflates accidental overlap and breaks the T=2 calibration. Ranks 11-20 are used ONLY for near-miss refresh detection.",
+    "T": "REVIEWER SIGN-OFF REQUIRED. An ABSOLUTE COUNT of shared URLs, never a ratio: a Jaccard or percentage form voids the whole T=2 + df<=5 calibration. T=3 under-merges question-form prompts because their SERPs rotate more than keyword SERPs.",
+    "one_shared_max_df": "REVIEWER SIGN-OFF REQUIRED. A shared URL is evidence only if it is RARE. df = how many corpus SERPs contain it. The most shared URLs are usually category listicles, and cross-competitor bleed starts only a little above this cap. A domain-based hub list is NOT a substitute.",
+    "a_high_confidence_max_rank": "REVIEWER SIGN-OFF REQUIRED. Counting a rank-10 hit like a rank-1 hit labels clusters 'high' that rest entirely on weak visibility.",
+    "centroid_only": "Membership is tested against the CENTROID only, never against any member. Single-linkage looks like a cheap recall win and is not: a chain of individually weak links fuses two unrelated topics, and over-merging is the error only a human catches. Over-splitting is cheap and self-correcting; page assignment re-aggregates.",
+    "a_max_rank_considered": "Brand hits worse than this rank do not fire Signal A; they set near_miss instead.",
+    "min_serp_urls": "A SERP with fewer than this many DISTINCT urls carries no join signal; the prompt is held out of clustering and carried as REVIEW."
+  }
+}

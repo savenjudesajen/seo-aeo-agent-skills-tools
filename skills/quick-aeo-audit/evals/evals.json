@@ -1,0 +1,59 @@
+{
+  "skill_name": "quick-aeo-audit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run a quick AEO audit for Northwind Studio (northwind.example.com), a project-management software company. Competitors are BrandA (branda.example.com), BrandB (brandb.example.com) and BrandC (brandc.example.com). Use their own slide template (attached as northwind-template.pptx). I need a client-ready deck with speaker notes.",
+      "expected_output": "The client's template edited in place, with insight slides added on a blank layout, built from a ~50-prompt non-branded prompt universe tagged by stage, metric and play, a single-run visibility baseline across ChatGPT, Claude and Perplexity for all four brands, a category share-of-voice chart, a keyword-gap-by-theme chart, a prompt-performance table, speaker notes with 'What to say' and 'Insight for the call' on every slide, and a clean deck_qc.py run.",
+      "files": [],
+      "expectations": [
+        "Probes each needed tool before relying on it and names any missing tool with the options from the Tools section instead of guessing",
+        "Builds roughly 50 non-branded prompts across Awareness, Consideration and Decision, each tagged with stage, mention vs citation, and Defend / Strengthen / Capture",
+        "Runs the visibility checks for every prompt x brand pair in waves and treats dropped calls as retries, not zeros in the final data",
+        "Reports per-platform visibility, category share of voice, the open-goal count and the branded vs category split, and labels the baseline directional, single-run",
+        "Edits the supplied template in place (stable shape matching, semantic colours set explicitly, footers renumbered) and adds new slides on a blank layout instead of cloning",
+        "Every slide has speaker notes with a 'What to say' part and an 'Insight for the call' part",
+        "Runs data/deck_qc.py on the deck and fixes findings until it exits 0, and renders the deck to images to check it by eye"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Fabrikam Bikes (fabrikam.example.com) sent two screenshots from their prompt-tracking tool: an overview card and a share-of-voice chart, plus a list of their main competitors. They have no deck template. Build the AI visibility audit deck. The share-of-voice chart header shows a different domain (oldbrand.example.org) than Fabrikam's.",
+      "expected_output": "The competitor set is taken from the user's list and checked against the overview card; the share-of-voice screenshot is flagged to the reviewer in chat as stale because it belongs to another domain, is kept out of the deck, and is replaced by a native share-of-voice chart from the new baseline; the deck is built on the neutral default layout with no leftover name from the other account; the dashboard's branded-inclusive number is reconciled with the lower non-branded baseline on the share-of-voice slide.",
+      "files": [],
+      "expectations": [
+        "Reads the screenshots first and cross-checks the overview card against the competitor list the user supplied",
+        "Notices the share-of-voice screenshot shows another domain, flags it as stale in chat (not in the deck), and replaces it with a native chart from its own baseline",
+        "Uses the neutral default layout from deck-layout.md because no template was supplied, adding slides on a blank layout",
+        "Explains on the share-of-voice slide why the dashboard's branded-inclusive number is higher than the non-branded share of voice",
+        "Runs deck_qc.py with --stale set to the other account's name or domain and gets exit 0",
+        "Contains no em dashes, no stock AI vocabulary and no tool or vendor names in slide body copy"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "For the Contoso Languages audit (contoso.example.com, a language-learning app) the keyword gap export shows the top untapped keywords are 'branda sign in', 'brandb app download' and 'brandc' with huge volume. Can you put those as the top opportunities on the keyword gap slide? Also the SEO suite API keeps saying not enough units.",
+      "expected_output": "Declines to present competitor brand and navigational terms as opportunities, buckets the untapped keywords by non-brand theme and charts theme totals with brand terms excluded; stops retrying the API, tells the user the account owner must allocate API units, and pulls the keyword gap and competitor top pages from the UI export instead.",
+      "files": [],
+      "expectations": [
+        "Explains that competitor brand and navigational terms are a data trap, not content opportunities",
+        "Groups the untapped keywords by non-brand theme and builds the keyword-gap chart from theme totals, noting brand terms are excluded",
+        "Stops calling the capped API and tells the user the account owner must allocate units",
+        "Gets the data from a UI export (or an export the user already has) instead",
+        "If it adds the competitor top-pages slide, computes the top-5-pages traffic share and classifies each page as navigational or category content"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Quick one: just give me an AEO visibility number for Tailspin Outdoors (tailspin.example.com) versus two competitors. Six prompts is fine, I just need a slide that shows we're number one.",
+      "expected_output": "Pushes back on the thin sample and on a win-only slide: recommends ~50 non-branded prompts across the funnel, explains that a slide built on prompts the client already wins undercuts the case for AEO, and leads with the category gap while keeping one proof-of-concept win, with every number sourced and labelled directional, single-run.",
+      "files": [],
+      "expectations": [
+        "Says a 6-prompt sample reads as unconvincing and recommends about 50 new non-branded prompts rather than more engines on the same prompts",
+        "Leads with the gap (category prompts where the client is not named) and keeps at most one win as proof of concept",
+        "Does not invent any visibility number; every figure comes from an actual visibility check",
+        "Labels the result directional, single-run"
+      ]
+    }
+  ]
+}

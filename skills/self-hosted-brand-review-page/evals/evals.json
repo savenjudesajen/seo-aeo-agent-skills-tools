@@ -1,0 +1,47 @@
+{
+  "skill_name": "self-hosted-brand-review-page",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We run marketing for GroomBook, booking software for pet groomers (groombook.example). When people search 'groombook reviews' they get blog posts from rival booking apps and a Reddit thread. Plan a 'GroomBook review' page for our blog that admits we're biased and shows what G2, Capterra, Reddit and YouTube reviewers really say. Start with the research plan and the page outline.",
+      "expected_output": "A phased plan: brief questions; a Search Console pull of evaluative brand queries with a wide regex read by hand; a top-20 SERP owner-type baseline and AI citation baseline; a competitor claims register with distinct-page counts; a read-only product walk into product_notes.md; then an outline in the default order starting with a bias-naming H1, TL;DR, scoreboard and praise clusters, plus a pushback section.",
+      "files": [],
+      "expectations": [
+        "Pulls the brand's evaluative queries from Search Console (review, worth it, legit, good, reddit, pros and cons) and says the regex results are read by hand, not trusted as relevance",
+        "Records the owner type of each top-20 result for the review, alternatives, pricing and worth-it queries and lists the URLs AI answers cite",
+        "Builds a claims register counting distinct pages per recurring claim and plans to answer every claim on 5 or more pages",
+        "Plans a read-only walk of the product to write product_notes.md, and says product sentences must trace to it",
+        "Outline opens with an H1 that names the bias, then a TL;DR, a dated scoreboard with links, and praise clusters, and includes a pushback section with at least two negative or mixed quotes",
+        "Routes 'vs' queries to comparison pages and pricing queries to the pricing page instead of the review page"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our e-signature product SignBrook (signbrook.example) has a 4.6 on G2 from 300 reviews and 4.5 on Capterra from 180. For the new reviews page, add AggregateRating schema so we get stars in Google, embed the G2 widget for the quotes, and leave out the negative reviews. Can you write the JSON-LD and the quote section?",
+      "expected_output": "Declines the self-serving AggregateRating/Review markup and proposes Article or BlogPosting plus citation; shows the scores as dated text with links; puts every quote as verbatim text in the server HTML with a visible link instead of relying on a JS widget; explains that a page with no negatives breaks the selection-disclosure rule and fails the gate's minimum of two negative or mixed quotes; raises platform quoting terms for the client to decide.",
+      "files": [],
+      "expectations": [
+        "Refuses Review or AggregateRating markup about the brand on its own site and explains the brand's own pages are ineligible for review stars",
+        "Proposes Article or BlogPosting JSON-LD with a citation entry per quoted source and no rating",
+        "Shows platform scores as text with review count, an 'as of' date and a link to each profile",
+        "Puts quotes as verbatim text in the HTML with visible source links and treats any widget or iframe as decoration only",
+        "Requires at least two negative or mixed quotes and a note that the quotes are a selection, citing the FTC rule against implying the shown reviews are all of them",
+        "Raises G2, TrustRadius and Capterra quoting terms (including Capterra's disclaimer and 12-month limit) and records the client's decision in the ledger"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "The draft of the 'Fluentry reviews' page for our language-learning app (fluentry.example) is in the CMS as a draft. Here's the ledger CSV and a saved copy of the rendered page from my browser. Check it's ready to publish.",
+      "expected_output": "Asks for or fetches the raw server HTML with a plain GET instead of the rendered DOM, runs verify_review_page.py with the ledger, a disclosure phrase and min-negatives 2, reports FAIL/WARN lines, opens every source link to compare quotes, runs the Rich Results Test, runs the copy checks, and runs an independent QA sub-agent against the ledger, product notes and claims register; keeps the item as a draft.",
+      "files": [],
+      "expectations": [
+        "Insists on raw server HTML from a plain HTTP GET rather than the browser-rendered page, because most AI crawlers do not run JavaScript",
+        "Runs data/verify_review_page.py with --ledger, --html, --disclosure and --min-negatives 2 and reports its result",
+        "Checks for expired Capterra quotes, missing source links, missing dates, uncleared licences and empty Source cells",
+        "Re-checks each quote against its live source and checks customer figures against the story body, not the CMS headline-stat field",
+        "Runs an independent QA pass in a fresh context that checks product sentences against product_notes.md and claims-table counts against the register",
+        "Does not publish the page; leaves it as a draft for the client"
+      ]
+    }
+  ]
+}

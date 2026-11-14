@@ -1,0 +1,55 @@
+{"skill_name": "prompt-to-page-serp-clustering", "evals": [
+  {"id": 1,
+   "prompt": "I have 340 AI-search prompts for TrailForge, a fictional hiking-boot brand on example.com, in prompts.csv with Search Console impressions. Cluster them into pages and tell me which existing page each prompt belongs on and where we need new pages.",
+   "expected_output": "A prompt-to-page map built from Google SERP overlap: a prompt master with hash ids, a SERP fetched for every prompt before clustering, centroid-greedy clusters on the top 10 with T=2 and the df-guarded 1-shared rule, rank-weighted page assignment with row-level evidence, a short list of demand-verified new pages, the five gates run, and the citations-proxy caveat stated.",
+   "files": [],
+   "expectations": [
+     "Builds a prompt master with stable ids (md5 of normalized text) and states fetched-SERP count equals prompt count before clustering",
+     "Stores top-20 results but clusters on the top 10, and uses ranks 11-20 only for near-miss refresh flags",
+     "Applies T=2 shared URLs, and joins on one shared URL only when its document frequency is 5 or less, it is not a hub host and the prompt is not a brand comparison",
+     "Sends every 1-shared join to a topicality hand-read instead of auto-accepting it",
+     "Assigns pages with brand-URL consensus where 2+ member SERPs at best rank 5 or better gives high confidence and worse ranks are rank-demoted to medium",
+     "Treats unplaced singletons as a negative test and checks seed demand, trend, seed ownership at full depth and the real page inventory before proposing any new page",
+     "Runs the integrity, grain, reconciliation and fidelity scripts and reports their exact output lines",
+     "States that Google organic overlap is a proxy for answer-engine citations"
+   ]},
+  {"id": 2,
+   "prompt": "We're launching a new site for Harborline Kayak Tours (fictional, harborline.example) so none of the pages exist yet. I have 28 planned page URLs, each with 3-6 verified keywords, and 150 prompts. Place the prompts on the planned pages.",
+   "expected_output": "Recognises that brand-URL consensus cannot fire on an all-create page set, builds each page's profile from SERPs for up to 5 of its keywords, scores clusters by rank-weighted shared URLs discounted by inverse page frequency, requires a 25% margin and marks near-ties AMBIGUOUS with both candidates, reports pairwise profile overlap as merge questions, and records a placement basis on every prompt.",
+   "files": [],
+   "expectations": [
+     "Explains that signal A cannot fire because the brand ranks for nothing yet, and switches to keyword-built page profiles",
+     "Fetches SERPs for up to 5 keywords per page and unions their non-hub top 10 into the page profile",
+     "Weights each shared URL by inverse page frequency across the page set, not only corpus document frequency",
+     "Marks a cluster AMBIGUOUS and names both candidate pages with scores when the runner-up is within 25% of the winner",
+     "Reports pairwise page-profile overlap and treats near-identical profiles as a merge question, letting head-term separation win when deep and head-term overlap disagree",
+     "Labels every prompt with one of the placement bases (SERP, HAND, JOB-OVERRIDE, FRAME, COMPRESSION, SECTION, NEW-PAGE) and counts them on the methodology tab",
+     "Proposes one hub rather than many thin pages when the new-page set is small cuts of one subject"
+   ]},
+  {"id": 3,
+   "prompt": "The page map for Copperleaf Garden Tools (fictional, example.org) came back from the client with comments in a column. Most pages only have one or two keywords. Action the comments, top up the thin pages with more keywords and give each page a priority score.",
+   "expected_output": "Agrees the comment legend first and reads comments as BUILD / FOLD / DROP / MOVE / approved-but-unplaced, never edits the reviewer column, treats un-commented rows as not reviewed, applies folds on the keyword sheet and reports score movement; backfills 2-10 keywords per thin page from the keywords already-ranking URLs rank for, using seed-containment, distinct-facet and not-elsewhere tests with a written reason per row; computes the KOB-based Opportunity Score by percentile rank without scoring missing CPC as zero; and re-runs the remap and reconciliation checks.",
+   "files": [],
+   "expectations": [
+     "Agrees the comment legend with the user before interpreting comments, and reads a rejection that offers a merge as a FOLD",
+     "Leaves the reviewer's column untouched and marks un-commented rows as not reviewed rather than approved",
+     "Applies folds on the keyword sheet, zeroes the absorbed page's rollups and names what the survivor page must now carry",
+     "Sources backfill keywords from what the URLs already ranking in each page's SERP rank for, not from a generic idea tool or slug fragments",
+     "Keeps 2 to 10 keywords per page, allows zero, and applies seed containment, distinct facet and a whole-sheet duplicate check with a reason per kept row",
+     "Checks what the owner of each source URL sells and rejects off-subject high-volume candidates",
+     "Scores pages with KOB 60 / Volume 25 / Trend 15 by percentile rank, impressions as an uplift, redistributes weight when CPC is missing, and labels keyword-less pages in words",
+     "Re-runs the post-review remap check and the reconciliation gate after backfill"
+   ]},
+  {"id": 4,
+   "prompt": "Quick sanity check before I send this prompt-to-page workbook for NorthPeak Climbing Gyms (fictional): the integrity gate passed. Anything else I need to verify?",
+   "expected_output": "Points out that a passing final gate is not proof the pipeline ran, and lists the remaining checks: exit codes on every step, grain check, reconciliation gate, fidelity re-fetch, 1-shared and low-confidence hand-reads, URL status gate on refresh/create rows, placement basis counts, drift quarantine on category vocabulary, content mix re-run, row-level evidence columns populated, zero formula errors and the citations caveat.",
+   "files": [],
+   "expectations": [
+     "Warns that a crashed earlier step can leave stale artifacts that later gates pass on, so every step's exit code must be checked",
+     "Requires the URL status gate: 200 with no redirect stays REFRESH, a redirect to another page flips to CREATE, and 404s are confirmed too",
+     "Requires 1-shared joins and authored-intent rows to have been hand-read",
+     "Checks that carried columns such as intent are populated, not just present",
+     "Checks final row count equals the prompt-master count and the workbook has zero formula errors",
+     "Confirms the deliverable states the Google-organic-as-citation-proxy caveat"
+   ]}
+]}

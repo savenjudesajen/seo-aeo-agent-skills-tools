@@ -1,0 +1,30 @@
+# robots.txt for <domain> (WordPress). Updated <YYYY-MM-DD>. Owner: <who edits this file>.
+# Search engines and AI answer engines may crawl everything public.
+
+User-agent: *
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+Disallow: /?s=
+Disallow: /search/
+# keep any legacy rules here only after checking the blocked URLs do not 301 to live pages
+
+# AI crawlers: listed so the policy is explicit. The group repeats the * rules,
+# because a named group does not inherit them.
+# Training tokens (GPTBot, ClaudeBot, Google-Extended, Applebot-Extended) are the
+# client's choice: to opt out, move them to their own group with "Disallow: /".
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: GPTBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: ClaudeBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+Disallow: /?s=
+Disallow: /search/
+
+Sitemap: https://<canonical host>/sitemap_index.xml

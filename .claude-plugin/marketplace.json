@@ -1,0 +1,17 @@
+{
+  "name": "seo-aeo-agent-skills-tools",
+  "owner": {
+    "name": "Saven Jude Sajen",
+    "url": "https://github.com/savenjudesajen"
+  },
+  "metadata": {
+    "description": "Client-proven SEO and AEO skills for AI agents"
+  },
+  "plugins": [
+    {
+      "name": "seo-aeo-skills",
+      "source": "./",
+      "description": "SEO and AEO methods for agents: prompt research, SERP-overlap clustering, prompt-to-page mapping, AI visibility audits, with gate scripts that check the output"
+    }
+  ]
+}

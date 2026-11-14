@@ -1,0 +1,13 @@
+{
+  "name": "seo-aeo-skills",
+  "displayName": "SEO & AEO Agent Skills",
+  "version": "1.0.0",
+  "description": "Client-proven SEO and AEO skills for AI agents",
+  "author": {
+    "name": "Saven Jude Sajen",
+    "url": "https://github.com/savenjudesajen"
+  },
+  "homepage": "https://unilytics.ai/skills/",
+  "repository": "https://github.com/savenjudesajen/seo-aeo-agent-skills-tools",
+  "license": "Apache-2.0"
+}

@@ -1,0 +1,27 @@
+{
+  "client": "ExampleSite",
+  "property": "https://blog.example.com/",
+  "google_account_u_index": 0,
+  "go_live_source": {
+    "type": "sheet",
+    "_type_options": ["sheet", "wp_rest", "sitemap", "manual"],
+    "sheet_drive_id": "REPLACE_WITH_DRIVE_FILE_ID",
+    "sheet_tab": "Refreshes",
+    "url_col": "A", "refresh_date_col": "B", "notes_col": "C", "data_starts_row": 2,
+    "wp_rest_origin": "https://blog.example.com",
+    "sitemap_url": "https://blog.example.com/sitemap.xml",
+    "manual_csv": "refreshes.csv"
+  },
+  "milestones_days": [7, 14, 28, 90],
+  "maturity_min_days": 7,
+  "gsc_lag_days": 3,
+  "output_dir": "OUTPUT_FOLDER",
+  "output_xlsx": "Example_Refresh_Tracker.xlsx",
+  "dashboard": {
+    "tool": "looker_studio",
+    "source": "csv_upload",
+    "_source_options": ["csv_upload", "google_sheet"],
+    "report_name": "Example Refresh Tracker"
+  },
+  "schedule_cron_local": "0 9 * * 1"
+}

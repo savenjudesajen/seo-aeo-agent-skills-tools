@@ -1,0 +1,48 @@
+{
+  "skill_name": "content-alignment-audit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our pet-care blog at example.com has about 300 posts and I think a lot of them say the same thing about puppy training and feeding. I've attached a 90-day Search Console pages export. Can you run a content alignment audit and tell me what to merge, redirect or rewrite?",
+      "expected_output": "A single audit spreadsheet in the template's columns with clusters built from page embeddings (or page-text similarity where vectors are missing), each page joined to Search Console metrics, scrape findings for high-impression and consolidation candidates, one of the six strategies per page with rationale and HIGH/MEDIUM/LOW confidence, a flagged-items tab, a summary with counts by strategy and the thresholds used, and a passing gate run.",
+      "files": [],
+      "expectations": [
+        "Normalises URLs and aggregates the Search Console export to one row per URL before joining",
+        "States how many pages have an embedding vector before interpreting blank similarity results",
+        "Clusters pages at the high-duplication band (above 0.85) with the highest-impression page as leader and notes the 0.70-0.84 band separately",
+        "Scrapes every page above the scrape threshold and every page considered for REDIRECT before recommending it",
+        "Measures each compared page's value-add from unique H2/H3 sections and their word share, and records the count in Research_Notes and the figure in Value_Add",
+        "Assigns exactly one of REDIRECT, REPURPOSE, REFRESH, REFORMAT, RETIRE, REMAIN per page with similarity, performance, content findings, rationale and confidence",
+        "Flags ambiguous cases (similarity 0.88-0.92 without clear differentiation, backlinks on redirect candidates) instead of forcing a decision",
+        "Runs data/verify_audit_output.py and reports that it passed before presenting results"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I ran a Screaming Frog crawl with embeddings on a language-learning site (example.org) but the Semantically Similar export only has 12 rows out of 800 pages. Does that mean almost nothing overlaps? I need a duplication audit for the client by Friday.",
+      "expected_output": "An explanation that the export lists only pages whose nearest neighbour passes the threshold (0.95 by default), so a short export does not mean low overlap; a check of vector coverage from the Internal export's embedding column; options to lower the threshold or compute pairwise cosine similarity from the vectors (and page-text similarity for pages without vectors); confirmation that Crawl Analysis ran and the content area excluded navigation and footer; then the audit proceeds.",
+      "files": [],
+      "expectations": [
+        "Explains that blanks in the similarity export mean 'not above the threshold', not 'not similar'",
+        "Asks for or checks the count of pages with an embedding vector",
+        "Recommends lowering the similarity threshold or computing pairwise cosine similarity from exported vectors to see the 0.70-0.95 band",
+        "Checks that Crawl Analysis was run and that the content area excludes boilerplate",
+        "Does not recommend any redirect from the 12-row export alone without scraping"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Two pages on our bike-repair site example.net look almost identical: /guides/fix-a-flat-tyre (12,000 impressions, position 3) and /blog/puncture-repair-tips (11,000 impressions, position 5), similarity 0.91. My manager wants one redirected today. What do you recommend?",
+      "expected_output": "Because both pages exceed 10,000 impressions, both are scraped before any decision; the recommendation compares their unique content, checks per-URL backlinks on the source, and either merges unique content into the stronger page (REFRESH) and redirects the other, or proposes REPURPOSE or REFORMAT if the scrape shows distinct intent or format. Confidence is MEDIUM or LOW until the scrape and backlink check are done; the row is flagged for review rather than redirected immediately.",
+      "files": [],
+      "expectations": [
+        "Applies the high-volume consolidation rule: scrape both pages before redirecting either",
+        "Notes that 0.91 similarity sits near the ambiguous 0.88-0.92 band and that the position gap is only 2",
+        "Checks external backlinks on the page that would be redirected using a per-URL source",
+        "Considers REFRESH of the stronger page with the other's unique content, REPURPOSE and REFORMAT as alternatives and says why each is or isn't chosen",
+        "Does not give HIGH confidence or recommend an immediate redirect before the evidence is in",
+        "Recommends updating internal links to the final URL and monitoring the target for 2-4 weeks after implementation"
+      ]
+    }
+  ]
+}

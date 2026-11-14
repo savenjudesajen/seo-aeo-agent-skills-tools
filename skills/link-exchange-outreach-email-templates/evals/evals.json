@@ -1,0 +1,58 @@
+{
+  "skill_name": "link-exchange-outreach-email-templates",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I run content for Kibble Crate (example.com), a dog-food subscription service. Another dog-food subscription brand, Bowlful, wrote proposing that we each add the other to a 'recommended resources' box in our blog sidebars, so every post on both sites links to the other. They say it would help both of us rank. How should I answer?",
+      "expected_output": "A Decline decision with one-line fit-test answers (direct competitor; asks for a sidebar link on every post, which fails both the 'what they want' check and the quality check; no single named page in return), and a filled T4 reply with no placeholders and no em dashes, plus a tracker row.",
+      "files": [],
+      "expectations": [
+        "Confirms or asks for the client's rules (competitor list, frozen pages, named sender) or states the assumptions used",
+        "Classifies Bowlful as a direct competitor and decides Decline",
+        "Notes that sitewide or sidebar links fail the quality check even apart from the competitor rule",
+        "Uses the T4 template with every placeholder filled, signed with the named sender, no em dashes",
+        "Does not offer Bowlful any link or mention on example.com",
+        "Logs a tracker row with the five fit-test answers, decision, template sent, date and status"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I look after the blog at Kiln & Glaze (example.com), a pottery-supplies shop. A ceramics hobby site, clayhour.example, emailed asking whether we trade links. They mention our guide 'Choosing your first pottery wheel' as the page they'd like a link from, but they don't say which of their pages would link back to us or where. Nobody else is on the thread yet; I'm replying first. What do I send?",
+      "expected_output": "A Need details decision: our page is named but nothing on their side is, so the fit test cannot pass yet. A check of whether the wheel guide is frozen or our most-cited page. A filled T2 email used as a first reply (no hand-off clause) that asks only for what is missing: the URL of their page and where the mention would sit.",
+      "files": [],
+      "expectations": [
+        "Decides Need details: their page is not named, so the Give and Quality checks cannot be run yet",
+        "Checks the named guide against the client's rules (frozen pages, most-cited page) before offering it",
+        "Uses T2 as a first reply: no hand-off clause and no question about our page, which they already named",
+        "Does not agree to any link before their page URL arrives and passes the quality floors",
+        "Leaves no placeholder in the email and uses no em dashes"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I want to start a mention exchange for Spokewise (example.com), a bike-repair shop with a blog. There's a cycling site at blog.example.org with an article called 'Fixing a flat on the road' that I think is cited a lot in AI answers. Our 'Tubeless tyre setup guide' at example.com/guides/tubeless is being refreshed this month. Write the outreach email.",
+      "expected_output": "A fit check of the target page (publisher, not a competitor, live, indexable, on topic, real traffic), verification of the AI-citation claim before using it, and a filled T9 outbound proposal.",
+      "files": [],
+      "expectations": [
+        "Checks that the cycling site is not a competitor and that the target page is live, indexable and on topic",
+        "Verifies that the article is cited in AI answers or ranks for the topic before stating it, instead of inventing a compliment",
+        "Uses the T9 template naming their page title and our page title and URL",
+        "Offers a reference in return and ends with a yes/no question",
+        "Notes the next steps: log the thread, confirm both sides with T6 on acceptance, and check both links are live and in the main text before closing with T7"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Lenslocker (example.com) rents out camera gear. A photography school, shutterclass.example, wants a link to their beginners' course from our pricing page. In return they'd add us to their article 'Renting vs buying your first camera' (they sent the URL; it gets steady search traffic). Our pricing page has no editorial content and we don't put outbound links there. What's the decision and the email?",
+      "expected_output": "A Counter decision: the school sells a service the brand does not sell and offers a named, relevant page, but the pricing page is the wrong page. A filled T3 email offering two content pages that fit (for example a beginner camera guide being updated) and asking which page they would link from and the sentence they suggest.",
+      "files": [],
+      "expectations": [
+        "Decides Counter, not Accept and not Decline",
+        "Explains that the requested page is the wrong place for the link",
+        "Runs the quality check on the school's named page (live, indexable, on topic, real traffic, link in the main text)",
+        "Uses the T3 template offering content pages that are being updated, not the most-cited page",
+        "Leaves no placeholder in the email and uses no em dashes"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{"skill_name": "aeo-prompt-audit", "evals": [
+  {"id": 1,
+   "prompt": "Wayfarer Goods (wayfarer.example.com) spent years as the budget luggage brand and has relaunched as a premium line with lifetime repairs. It's also time for the quarterly review of their tracked prompts. The tracker holds 120 prompts. Leave out the ones under the 'Premium launch' tag, which came from fresh keyword research, and tell us what to keep, rewrite or remove in the rest. Focus clusters: premium carry-on luggage, luggage with lifetime warranty, durable checked suitcases.",
+   "expected_output": "A Step 0 trigger (repositioning, with the scheduled quarterly pass alongside), a frozen dated export verified against the platform total, the positioning sentence and focus clusters in the owner's words, the 'Premium launch' tag treated as an excluded set (not audited, but used for duplicate checks), provenance classes on every row, the echo check, hand-written decisions in topic batches with two pilots first, a harmonization pass and a fresh-context sample of at least 60 rows, a survivor coverage matrix, a two-sheet workbook that passes data/verify_audit.py, and a retire plan that archives before deleting.",
+   "files": [],
+   "expectations": [
+     "Writes the audit trigger before any decision and names repositioning as the dominant test",
+     "Treats the 'Premium launch' prompts as an excluded set and checks every audited prompt against it for duplicates, including KEEP and REWRITE rows",
+     "Removes or flags 'cheapest carry-on luggage' and 'best budget suitcase' style shortlists as a positioning misfit (POS-MISFIT) rather than keeping them for their visibility, while informational questions on the same topic can survive as Citation rows",
+     "Uses only the closed decision list (KEEP, REWRITE, REMOVE (DUPLICATE), REMOVE, REVIEW) and never labels a duplicate MERGE",
+     "Pilots two batches (the most ambiguous topic and the one with the most unknown provenance) before running the rest",
+     "Runs data/verify_audit.py and reports AUDIT GATE: PASS before presenting the workbook",
+     "Does not change anything on the platform before the owner signs off, and archives retired prompts with their history before any delete"
+   ]},
+  {"id": 2,
+   "prompt": "We inherited 400 tracked prompts for Tutorly, an online language-tutoring marketplace (tutorly.example.org). Nobody knows who wrote them and there was never any keyword research. Just clean the list up, prompt by prompt.",
+   "expected_output": "The agent explains that a set with no keyword research behind any of it is not audited prompt by prompt, and proposes the restart: keyword research, then prompt simulation (aeo-keyword-research-and-prompt-simulation), then a comparison that carries over only old prompts passing the gates and not already covered. It notes that reverse-engineering seeds is for mixed sets.",
+   "files": [],
+   "expectations": [
+     "Does not start a prompt-by-prompt audit of a set with no keyword research at all",
+     "Proposes keyword research, then prompt simulation, then comparison with the old list",
+     "Explains that old prompts are carried over only if they pass the gates G1 to G4 and are not already covered",
+     "Distinguishes this from a mixed set, where unknown-origin rows get a reverse-engineered seed keyword sized with its source"
+   ]},
+  {"id": 3,
+   "prompt": "Audit these 60 prompts for Glasshouse Works (glasshouse.example.net), an industrial greenhouse-equipment maker that wants to win 'commercial greenhouse heater' and 'greenhouse ventilation system' questions. Many prompts look like 'You are a nursery owner in Denver. Rank the top 10 greenhouse heater brands' and some are 'Brand A vs Brand B for tomato growing'. The tracker says visibility is 40% overall and most of it comes from prompts with Glasshouse Works in them.",
+   "expected_output": "A per-row audit where the nursery-owner persona plus forced-ranking prompts and other location-injected prompts are marked INSTRUMENT (removed, or rewritten into a grower's question anchored on a real keyword such as 'commercial greenhouse heater'), competitor-only comparisons such as 'Brand A vs Brand B for tomato growing' are COMP-ONLY, each competitor keeps at most one head-to-head and one alternatives row, branded prompts are reported separately from the headline visibility number, and the Summary states how far the visibility number will move once the set changes.",
+   "files": [],
+   "expectations": [
+     "Marks the 'You are a nursery owner in <city>. Rank the top 10 greenhouse heater brands' rows (persona preamble, forced ranking, location injection) as INSTRUMENT shapes",
+     "Marks 'Brand A vs Brand B for tomato growing' rows that exclude the brand as COMP-ONLY under G4",
+     "Keeps at most one '<brand> vs <competitor>' and one 'alternatives to <competitor>' row per competitor",
+     "Every REWRITE quotes the row's own keyword as its anchor (for example 'greenhouse ventilation system') and stays in the human shape a grower would type (about 8 to 16 words, no persona or output instruction)",
+     "Reports branded and non-branded visibility separately and explains that a fall in average visibility after the audit is the denominator moving",
+     "Writes a distinct, row-specific reason on every row with no em dashes"
+   ]}
+]}

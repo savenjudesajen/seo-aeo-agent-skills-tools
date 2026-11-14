@@ -1,0 +1,47 @@
+{
+  "skill_name": "robots-txt-and-llms-txt",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Edgewright Cutlery sells kitchen knives on Shopify (www.example.com). A security app they installed added rules to robots.txt: 'User-agent: OAI-SearchBot' and 'User-agent: Claude-SearchBot' both get 'Disallow: /', and there's a separate group for AhrefsBot with only 'Crawl-delay: 20'. They want to show up in ChatGPT and Claude answers. What's wrong and what should the file say?",
+      "expected_output": "An audit built on the checker's group resolution for every host variant: OAI-SearchBot and Claude-SearchBot are blocked from / (HIGH: the site cannot be cited in those engines' search answers); the crawl-delay-only group allows that bot everything, including the cart and checkout paths the * group blocks, because a group with no Disallow lines allows all; the training tokens are listed as the client's decision. The fix list gives the literal current line, the literal replacement and why, notes that Shopify robots.txt is edited through the robots.txt.liquid template, and finds which app or setting writes the rules. The proposed file re-runs through the checker with exit 0.",
+      "files": [],
+      "expectations": [
+        "Fetches the live robots.txt on www, non-www and any subdomain rather than assuming its contents",
+        "Runs data/check_robots_llms.py and reports the HIGH findings for OAI-SearchBot and Claude-SearchBot being blocked from /",
+        "Explains that the crawl-delay-only group does not inherit the * disallows and so opens the whole site to that bot",
+        "Separates search and user-fetch tokens (keep allowed) from training tokens (client's choice) instead of deciding per vendor",
+        "Identifies who or what writes the rules (the installed app, the platform's robots template) before proposing the edit",
+        "Gives a fix list with the literal current line, the literal replacement and why, and re-runs the checker on the proposed file with exit 0"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Ferncastle Advisory is a B2B consulting firm (example.com). The CMO read that llms.txt boosts visibility in ChatGPT and wants one live this week. Draft it, tell me what to say to her about the impact, and check whether three of their competitors (competitor-a.example, competitor-b.example and competitor-c.example) have one.",
+      "expected_output": "A complete llms.txt following the spec (one H1, blockquote summary, optional facts paragraph, H2 sections of '- [Name](absolute URL): description' covering services, proof, guides and company, with ## Optional last), built from the services-brand template using canonical 200 URLs; an honest framing (no major engine has confirmed reading llms.txt, a published log test saw no AI crawler fetch it, it costs about an hour, priority Low); and a competitor table with status, link count, sections and spec pass/fail for each, every competitor file run through the checker's llms.txt mode.",
+      "files": [],
+      "expectations": [
+        "Does not claim that llms.txt improves AI visibility; states that no major engine has confirmed using it",
+        "Recommends it as low-priority hygiene rather than a visibility lever",
+        "The draft has exactly one H1, a blockquote summary right after it, H2 link sections and ## Optional as the last section",
+        "Every link is absolute and has a ': description', and thank-you, gated, campaign, legal and expiring pages are left out",
+        "Fetches /llms.txt on each competitor and records status (200 Markdown / soft 404 / 404), link count, sections and spec pass/fail",
+        "Runs the checker on the draft and on each competitor file and reports the results"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Short crawlability write-up for Riverbike Tours, a cycling-holiday operator on WordPress (www.example.com). robots.txt has one '*' group: Disallow /wp-admin/ (with admin-ajax allowed), Disallow /?s= and Disallow /tag/, plus a sitemap line. /llms.txt returns a plain 404. Is anything wrong, and should they bother with llms.txt?",
+      "expected_output": "A short finding: robots.txt is healthy (single * group, no isolation risk, every AI search, user-fetch and training token can read content pages), with the note that blocking tag archives means posts need hub or category links; the checker's 'no AI crawler is named' note is mentioned as documentation only; llms.txt is absent (404) and recommended as optional low-priority hygiene with the honest no-measured-benefit framing.",
+      "files": [],
+      "expectations": [
+        "Runs the checker on the fetched robots.txt and reports the file as healthy before listing any change",
+        "Notes that blocking /tag/ means posts must be reachable through hub, category or in-body links",
+        "Does not treat the checker's 'no AI crawler is named' LOW note as a defect that outranks real findings",
+        "States the llms.txt status as fetched (404), not assumed",
+        "Recommends llms.txt only as low-priority hygiene and does not claim a visibility benefit",
+        "Checks that the WordPress defaults (wp-admin disallow, admin-ajax allow, sitemap) are present and that /wp-content/ and /wp-includes/ are not blocked"
+      ]
+    }
+  ]
+}

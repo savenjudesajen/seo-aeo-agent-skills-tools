@@ -1,0 +1,36 @@
+{"skill_name": "gsc-url-queries", "evals": [
+  {"id": 1,
+   "prompt": "What queries is https://www.example.com/pricing getting in Google? Pull the last 3 months from Search Console for the Domain property example.com and give me a CSV.",
+   "expected_output": "Uses the property id sc-domain:example.com, an ISO date range covering the last 3 full months, an equals page filter on the exact URL, pages through results if a call returns exactly rowLimit rows, and saves a CSV with page, query, clicks, impressions, ctr (percent) and position. States that anonymised long-tail queries mean totals won't reconcile.",
+   "files": [],
+   "expectations": [
+     "Uses 'sc-domain:example.com' as the property id, not the bare domain or a URL",
+     "Dates are passed in ISO YYYY-MM-DD format",
+     "Filters on the page dimension with operator equals and the exact URL",
+     "Output columns are page, query, clicks, impressions, ctr, position with CTR as a percentage",
+     "Mentions that Search Console anonymises rare queries so query totals won't match page totals",
+     "Never prints or writes the client secret, refresh token, access token or Authorization header"
+   ]},
+  {"id": 2,
+   "prompt": "Pull Search Console queries for every page under /blog/ on https://www.example.org/ (it's a URL-prefix property) for January to March 2026, including the last few days of data.",
+   "expected_output": "Uses the URL-prefix property id with trailing slash, pageOperator contains with /blog/, dataState all, dates 2026-01-01 to 2026-03-31, pages with startRow until a call returns fewer than rowLimit rows, and notes that the freshest days are not final and will change.",
+   "files": [],
+   "expectations": [
+     "Uses 'https://www.example.org/' (full URL with trailing slash) as the property id",
+     "Uses the contains operator with the /blog/ path instead of listing URLs by hand",
+     "Sets dataState to all and warns that the last 2-3 days are not finalised",
+     "Pages through results with startRow when a call returns exactly rowLimit rows",
+     "Records the property, date range, match mode and dataState with the output"
+   ]},
+  {"id": 3,
+   "prompt": "Here are 12 URLs from blog.example.com. Get the GSC queries for each one for the last 90 days. I haven't set anything up for the Search Console API yet.",
+   "expected_output": "Checks for a Search Console connector or export first; since API credentials are missing, walks the user through the one-time OAuth setup (enable the Search Console API, Desktop OAuth client, refresh token for webmasters.readonly via the OAuth Playground) and has the user store the credentials themselves; then batches all 12 URLs, spacing calls, recording per-page row counts and listing zero-row pages with likely causes.",
+   "files": [],
+   "expectations": [
+     "Offers the user's own Search Console connector or export as the first option",
+     "Explains the one-time setup: enable Google Search Console API, Desktop app OAuth client, refresh token with the webmasters.readonly scope",
+     "Has the user enter the credentials (environment variables or browser storage) rather than asking them to paste secrets into the chat",
+     "Batches the 12 URLs in one run and reports a row count or error per URL",
+     "Lists any zero-row URLs with likely causes such as URL variant mismatch, wrong property or no impressions"
+   ]}
+]}

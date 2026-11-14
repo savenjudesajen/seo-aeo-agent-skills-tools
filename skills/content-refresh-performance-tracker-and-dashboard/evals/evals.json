@@ -1,0 +1,38 @@
+{"skill_name": "content-refresh-performance-tracker-and-dashboard", "evals": [
+  {"id": 1,
+   "prompt": "We refreshed about 30 posts on garden.example over the last two months (a home-gardening publisher). Did the refreshes work? Build me a tracker I can keep updating.",
+   "expected_output": "Before pulling any data, the agent asks where the go-live / refresh dates live (tracking sheet, CMS, sitemap or a manual list) and waits for a dated list. It then explains the per-page method (POST = [R+1..L] against an equal-length PRE = [R-n..R-1], L confirmed as the last complete Search Console day), the sitewide control, the maturity gate and the verdict taxonomy, builds the append-only workbook with build_tracker.py, and runs verify_tracker.py before reporting.",
+   "files": [],
+   "expectations": [
+     "Asks where the refresh dates live before pulling any search data",
+     "Anchors each page's windows to its own refresh date with POST [R+1..L] and an equal-length PRE [R-n..R-1]",
+     "Confirms L as the last complete Search Console day instead of assuming today",
+     "Pulls a sitewide control per distinct window and computes net_impr_vs_site",
+     "Labels pages with fewer than 7 post-refresh days as Maturing and leaves them unscored",
+     "Builds the per_page, milestone_curve, sitewide_control and README sheets",
+     "Runs the gate script and reports only after it passes"
+   ]},
+  {"id": 2,
+   "prompt": "Our refreshed guide on trailbikes.example lost about half its impressions since the update, but Search Console shows its average position actually got slightly better. The editor wants to roll the refresh back. Should we?",
+   "expected_output": "The agent reads the clean since-refresh numbers, compares the page's impression change with the sitewide control for the same windows, notes that rank held or improved, and classifies the page as Demand-drop (rank held): a demand or SERP change, not the content. It recommends against a rollback and suggests investigating query demand (for example AI Overviews on the main queries), citing the strict rollback rule.",
+   "files": [],
+   "expectations": [
+     "Uses the clean since-refresh read, not a dashboard rolling comparison window",
+     "Compares the page's impression change with the sitewide control for the same windows",
+     "Classifies rank held plus impressions down as Demand-drop (rank held), not Decliner",
+     "Recommends against a rollback and cites the rule that rollback needs both impressions and position worse, past maturity, not explained by the site",
+     "Suggests checking query or SERP demand changes"
+   ]},
+  {"id": 3,
+   "prompt": "Set up the weekly refresh update for petfood.example's blog tracker and a Looker Studio dashboard the content lead can open. The workbook from last Monday is attached as Tracker.xlsx.",
+   "expected_output": "The agent sets up a weekly scheduled task (cron in local time) whose self-contained prompt checks the go-live source for new refreshes, keeps a copy of last week's workbook, re-pulls Search Console, appends a dated snapshot without overwriting, runs verify_tracker.py with --previous to prove append-only, and refreshes the dashboard source. For Looker Studio it explains the CSV-upload vs Google Sheet source choice, has the user handle OAuth and the native file picker, fixes numeric field types to Number (not Percent), and builds the verdict tally, per-page net-vs-site bar (Others grouping off) and milestone views.",
+   "files": [],
+   "expectations": [
+     "Appends a dated snapshot each week and never overwrites earlier rows",
+     "Runs verify_tracker.py with --previous against last week's copy",
+     "Explains the CSV-upload (manual re-upload) versus Google Sheet (auto-refresh, same Google account) source choice",
+     "Leaves OAuth approval and the native file picker to the user",
+     "Sets numeric fields to Number rather than Percent because values are already percentage points",
+     "Turns off 'Group the rest as Others' and sets the bar count above the page count"
+   ]}
+]}

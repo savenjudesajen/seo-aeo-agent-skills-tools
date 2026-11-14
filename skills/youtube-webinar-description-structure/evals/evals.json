@@ -1,0 +1,47 @@
+{
+  "skill_name": "youtube-webinar-description-structure",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Greenrow (greenrow.example) makes farm-management software for vineyards. We're uploading last month's 45-minute webinar on irrigation scheduling to their YouTube channel. Here's the transcript export, the landing page (greenrow.example/webinars/irrigation) and the two speakers. Can you write the title, description, chapters and tags?",
+      "expected_output": "One upload package: a head-term-first title of 70 characters or less with a series or brand suffix, a description in the 10-block order (hook with the head term, one primary link with UTMs in the first 3 lines, a 40 to 70 word answer paragraph, context, 4 to 6 learn bullets, 6 to 15 transcript-backed chapters from 00:00, speakers, resources, subscribe, 3 to 5 hashtags on the last line), 8 to 15 tags, a playlist suggestion, and a clean run of verify_description.py.",
+      "files": [],
+      "expectations": [
+        "Pulls search volume for the topic cluster and picks the highest-volume head term that matches what the webinar covers, then reads the dominant title format in the top results",
+        "Picks 2 non-branded natural-language prompts the recording answers, tagged with stage and KPI, and uses them for the answer paragraph and bullets, never as the title",
+        "Builds chapters from the transcript's speaker turns, estimates times inside long turns by character position, rounds to 5 seconds and marks estimated chapters in the notes",
+        "Every number, quote, speaker title and customer name in the description appears in the transcript or on the landing page",
+        "Puts the head term in the first 200 characters of the description and keeps links out of the first line",
+        "Runs data/verify_description.py on the package JSON, fixes every FAIL and reports the WARNs"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Rewrite the YouTube descriptions for these 6 product demo videos from Kilnworks (kilnworks.example), a maker of industrial kiln controllers. Two of them are the same session recorded for the morning and afternoon audiences, three are in German, and we only have transcripts for four. Put everything in an upload tracker.",
+      "expected_output": "A tracker with one row per video: the four transcript-backed rows get full packages with chapters; the two without transcripts are marked draft only with no chapters; the repeated session is uploaded once with the other noted; German rows use German headings and German copy with English brand hashtags where they fit; every row passes the gate.",
+      "files": [],
+      "expectations": [
+        "Marks rows without a transcript as draft only and omits the chapters block for them instead of inventing timestamps",
+        "Recommends uploading one of the two repeated sessions and notes the other in the tracker",
+        "Pulls keyword volume in the German market for the German videos and writes their title, description and headings in German",
+        "Checks each replay or registration link and, when a page is retired, links the product page instead",
+        "Fills a notes column for drafts, estimated chapters and anything still needing approval",
+        "Runs verify_description.py on all rows and fixes every FAIL before presenting"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Brightfold (brightfold.example) sells library management software. One of their customers, a university library, spoke at their user conference about moving their catalogue to the cloud. Can you get this session ready for YouTube? Their style guide uses em dashes a lot.",
+      "expected_output": "A package for a customer-story session: a title in the customer-story or how-to format led by the head term, a description whose context block names the customer speakers with titles from the transcript, a flag that the customer must approve the upload before it goes live, and a gate run with --allow-dashes because the client's style allows dashes.",
+      "files": [],
+      "expectations": [
+        "States that the customer named in the session must approve the upload before it is published",
+        "Loads the client's brand voice and writing rules before writing and notes the dash exception before running the gate",
+        "Runs verify_description.py with --allow-dashes and explains why",
+        "Uses a customer-story title pattern only if the head term's results favour it, and keeps the title to 70 characters by shortening the suffix first",
+        "Names the Q&A chapter by its main question if the session ends with Q&A",
+        "Does not add attribution, tool names or links to the skill's repository to the description"
+      ]
+    }
+  ]
+}

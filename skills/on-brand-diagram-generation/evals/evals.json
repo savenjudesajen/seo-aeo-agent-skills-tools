@@ -1,0 +1,59 @@
+{"skill_name": "on-brand-diagram-generation", "evals": [
+  {
+    "id": 1,
+    "prompt": "We're refreshing a post on hopsandkettles.example about how their brewhouse controller syncs recipes from the cloud to the kettle. Design a new 'how it works' diagram for it that matches their brand, and render it so I can review before anything goes live.",
+    "expected_output": "Before drawing anything, the agent finds 2-4 of the brand's own published diagrams (media library search, other posts, product pages), views the raw image URLs, and fills a style_spec.json with sampled hexes, aspect ratio, box geometry, typography, connector and labelling conventions, and derivation_evidence URLs. It authors one SVG explaining a single idea (recipe sync from cloud to controller to kettle) at the reference aspect ratio using only palette colours, with <title> and <desc>, runs diagram_style_probe.py until it exits 0, does a side-by-side family check against a reference, renders a 2x PNG and delivers PNG + SVG + alt text without touching the live post.",
+    "files": [],
+    "expectations": [
+      "Collects and views at least one of the brand's own published diagrams before authoring the SVG",
+      "Writes a style-spec whose approved_palette comes from sampled reference colours, with derivation_evidence URLs",
+      "The SVG matches the reference aspect ratio and contains non-empty <title> and <desc>",
+      "Runs data/diagram_style_probe.py against the SVG and spec and reports an exit 0 / PASS before presenting",
+      "Performs a side-by-side family check against a real reference image, not only the script",
+      "Renders the PNG at twice the authored size",
+      "Provides descriptive alt text naming the components and their relationship",
+      "Does not upload or edit the live post, because the user only asked for review"
+    ]
+  },
+  {
+    "id": 2,
+    "prompt": "Here's a draft SVG for the tidewaterkayaks.example blog showing their rental booking flow. It uses their colours, but it's thin grey outline boxes with square corners and tiny labels, and the diagrams on the rest of their site are chunky, rounded and friendly. Can you fix it so it's on-brand?",
+    "expected_output": "The agent does not polish the draft from its own taste. It goes back to Phase A: finds the brand's real diagrams, views the raw images and records every style dimension in the spec (corner radius, fill vs outline, stroke weight, type family and size, density), not only the palette. It rebuilds the SVG to that spec (rounded corners at the measured radius, the fills and stroke weights the references use, label sizes that stay readable at content width), keeps every colour inside the sampled palette, reruns the gate to exit 0 and then does the side-by-side family check, noting that the gate alone passed the old draft because its colours were right.",
+    "files": [],
+    "expectations": [
+      "Treats the brand's own reference diagrams as the source of truth and re-derives the style-spec from them",
+      "Records corner radius, fill style, stroke weight, typography and density in the spec, not only colours",
+      "Rebuilds the shapes and labels to the measured geometry instead of only recolouring the draft",
+      "Keeps every colour inside the sampled palette and adds none without evidence",
+      "Re-runs the gate until it passes and states the result",
+      "Does the side-by-side family check and explains that a passing gate did not make the old draft on-brand"
+    ]
+  },
+  {
+    "id": 3,
+    "prompt": "The new diagram for the solar-monitoring explainer on brightpanel.example passed your checks and I like it. Please swap it into the WordPress post in place of the old figure.",
+    "expected_output": "The agent confirms explicit approval for the live edit, uploads the PNG through the WordPress media endpoint using the user's own logged-in session, and if the upload seems to time out it checks the recent-media list before retrying. It replaces the old figure's src, size and alt in the post content, then verifies with booleans only (new image count 1, old image count 0, figure present, alt present, status publish). It reports any orphaned old media id to the user without deleting it.",
+    "files": [],
+    "expectations": [
+      "Asks for or confirms explicit approval before writing to the live post",
+      "Uses the user's own logged-in session or nonce and never asks for or handles their password",
+      "On an apparent upload timeout, checks the media list before re-uploading",
+      "Sets descriptive alt text on the swapped image",
+      "Verifies new image present exactly once and old image gone, returning counts/booleans rather than raw HTML",
+      "Reports the orphaned old media item instead of deleting it"
+    ]
+  },
+  {
+    "id": 4,
+    "prompt": "The bike-repair shop site spokewise.example looks inconsistent across its pages. Make the service pages match the homepage's design.",
+    "expected_output": "The agent measures computed styles (headings, body, buttons, section padding, container width and offset, band backgrounds) across several pages at a fixed desktop width, writes a token table before building, fixes the common dimensions (section spacing, content edges, heading scale, band backgrounds), keeps one CTA per job, keeps content in static HTML, and re-runs the audit at the target desktop, tablet and phone widths to verify uniformity.",
+    "files": [],
+    "expectations": [
+      "Measures computed styles on multiple pages rather than judging from screenshots alone",
+      "Writes a token table (colours by role, type scale, spacing, max-width) before changing pages",
+      "Addresses section spacing, content edge alignment, heading scale and band backgrounds",
+      "Removes duplicate CTAs that do the same job in one viewport",
+      "Re-measures after building at desktop, tablet and phone widths and compares with the token table"
+    ]
+  }
+]}

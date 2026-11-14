@@ -1,0 +1,45 @@
+{"skill_name": "url-pruning-and-cannibalization-audit", "evals": [
+  {
+    "id": 1,
+    "prompt": "TrailKit is an outdoor-gear shop at www.example.com on WordPress with about 2,000 URLs: product pages, category pages, a blog and a lot of old buying guides. Run a full content pruning audit and tell me what to keep, redirect or remove. Search Console and GA4 are connected to Screaming Frog, and the Search Console bulk export is in BigQuery.",
+    "expected_output": "A three-phase audit: phase 1 pruning workbook (Live pages (200), Redirects and non-200, Dynamic URL patterns, Method) with a hand-written Remain/Redirect/Retire decision and reason per live URL, a redirect file and a cluster map HTML; phase 2 page value columns after the redirects are live; phase 3 Cannibalization workbook with owners and anchor splits; the gate script passing on each workbook.",
+    "files": [],
+    "expectations": [
+      "Checks that Search Console, GA4, URL Inspection and the AI provider show Connected and counts non-empty cells per API column before using the crawl, stopping on an empty column",
+      "Pulls the full WordPress item list through the REST API, diffs it against the crawl and crawls the gap in List mode",
+      "Counts pages with vectors and with text, fills missing similarity from cleaned page text, and never reads a blank similarity cell as below threshold",
+      "Applies the absorber test (live 6+ months, similarity 0.90+, same intent confirmed on the live page, Medium or High cannibalization against the survivor, never clicks alone) and flags carry-over sections with Review = Y before any 301",
+      "Never targets the homepage with a redirect and never marks a redirect rule safe to drop without a per-URL backlink check",
+      "Handles ?parameter URLs as patterns with a researched rule and does not block still-indexed URLs in robots.txt",
+      "Runs data/verify_audit_workbook.py and an independent QA sub-agent before delivering, and delivers nothing with unconfirmed claims"
+    ]
+  },
+  {
+    "id": 2,
+    "prompt": "Our language school site (www.example.com) has a /courses/spanish-online product page and three blog posts about learning Spanish online. I think they're cannibalizing each other. Here is a Search Console query x page CSV for the last 16 months. Which page should own 'learn spanish online' and what do I do with the others?",
+    "expected_output": "A phase 3 cannibalization analysis: noise filter with a brand pattern, pair metrics from data/cannibalization_pairs.py, a live read of every High and Medium pair, a results-page check for the top shared query, the product page named as owner unless intent says otherwise, Re-target (not Merge into owner) for blog posts that compete with the buying page, an anchor split, and a cannibalization pairs workbook that passes the gate.",
+    "files": [],
+    "expectations": [
+      "Filters brand queries (with misspellings), queries over eight words and operator queries before computing pairs, and records the brand pattern in Method",
+      "Computes shared queries, query overlap %, weekly swaps and severity with the script and states that the script does not decide",
+      "Checks the live results page for the top shared query before naming an owner",
+      "Never recommends merging the product page into a blog post; a blog post that competes with it gets Re-target with the shared query removed from its title, H1 and leading H2s",
+      "Writes an anchor split saying which wording links to which page",
+      "Recomputes every number quoted in a Reason from the pair metrics"
+    ]
+  },
+  {
+    "id": 3,
+    "prompt": "ExampleCo runs a pet-supplies shop at www.example.com. Its pruning redirects are live. Check whether the remaining pages earn anything in search, including landing pages that get plenty of sessions but may not appear in Google at all.",
+    "expected_output": "A phase 2 page value and indexation check on the cleaned list: age gate (6 months), page-level Search Console totals including anonymized queries, GA4 sessions split by channel, two index checks (URL Inspection plus a site: search), and a hand-written decision per page with no search value, added as columns on the live sheet.",
+    "files": [],
+    "expectations": [
+      "Applies the age gate first and marks pages under 6 months old as Wait with a recheck date",
+      "Defines no search value as under 100 impressions and under 10 organic sessions in 6 months, from page-level Search Console totals rather than blank crawl cells",
+      "Splits sessions by channel and does not count Direct or Unassigned sessions as value",
+      "Confirms index state with both URL Inspection and a site: search, treating neither as reliable alone",
+      "Keeps campaign pages with paid or email traffic live as noindex, removed from the sitemap and linked only from CTAs and navigation",
+      "Fills the live sheet's Live since and Age (months) columns, and adds Search impressions (6 mo), Organic sessions, AI Assistant sessions, Campaign sessions, Index check and Value decision columns"
+    ]
+  }
+]}

@@ -1,0 +1,52 @@
+{
+  "skill_name": "publish-blog-content-to-nextjs-repo",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "The refreshed drafts for three posts on a bike-touring company's blog (trailwheel.example) are final: route-planning-basics, packing-list-for-multi-day-rides and choosing-a-touring-saddle. They're .docx files. The site is Next.js on Vercel and the code is in the client's private GitHub repo, which I've already cloned. Get them live, and add FAQ schema to each one.",
+      "expected_output": "Read-only recon of the repo in the browser (content files, renderer, slug-to-file map, existing FAQ field convention, package.json), a written grammar of the renderer, a converter from .docx to that subset that strips publishing notes and reads bold from the resolved property, an in-place apply with the manifest layout set to the repo's conventions, all four gates with saved counts, the deploy-linked identity found before any commit, a PR that discloses every conversion and drop, a CLI merge, a confirmed Ready production deploy, live checks compared with the prediction, and the tracker updated.",
+      "files": [],
+      "expectations": [
+        "Reads the renderer source line by line and writes down its supported block and inline forms before converting anything",
+        "Maps each of the three slugs to exactly one content file and checks for prefix collisions and an existing FAQ field convention",
+        "Takes each post's metadata from the drafts' publishing-notes table and strips that table and any image or diagram brief from the body",
+        "Reads bold from the resolved run property (run.bold) rather than the raw w:b tag when converting the .docx drafts",
+        "Edits verify_publish.py's SUPPORTED and LEAKS tables to the grammar it read, runs the renderer gate with --json, and records the per-post counts",
+        "Runs the literals and untouched gates and a typecheck, and says whether the typecheck was the full project or the data layer alone",
+        "Identifies the deploy-linked git identity from past Ready deployments before committing, and commits and merges as that identity from the command line rather than the web Merge button",
+        "Hands back only credential-gated steps (clone, push), each as one single line, and no more than two per publish",
+        "Confirms the production deployment reached Ready, fetches each live URL, and compares live heading and table counts with the prediction before calling it done",
+        "Updates the content tracker to Live only after the live gate passes, then re-reads each written cell and the row past the last write"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "We merged the content refresh PR for a houseplant shop's blog (leafline.example) an hour ago but the live posts still show the old titles. Vercel shows the latest production deployment as Blocked. Can you sort it out?",
+      "expected_output": "Diagnoses the git-author block: the web Merge button stamped the merge commit with the browser session's GitHub identity, which has no linked Vercel account. Finds the linked identity from past Ready deployments (or a passing preview), explains that a blocked deployment can't be redeployed, and has a fresh commit (an empty commit is enough) landed on the default branch by the linked identity, handed back as one line if it needs the user's push. Refuses the deploy-hook shortcut, then confirms Ready and verifies the live pages.",
+      "files": [],
+      "expectations": [
+        "Identifies the merge commit's author as the cause rather than the content commit or the build",
+        "Finds the deploy-linked identity from past Ready production deployments or a passing preview build, without asking the client",
+        "States that a Blocked deployment can't be redeployed and that a fresh commit from the linked identity is needed (an empty commit is enough)",
+        "Does not create a deploy hook, invite accounts to the client's team or commit under someone else's identity; raises any such option as the client's decision",
+        "Gives any credential-gated step back to the user as one single chained line and says what it will do once it lands",
+        "Confirms the new deployment reached Ready and checks the live titles and Markdown leaks on every changed URL before reporting done"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Publish the new post 'How to read a climbing-gym route grade chart' to cragroom.example's blog. Its draft has a numbered list of steps, a pull quote, an embedded YouTube video and a comparison table. The posts are template literals in a TypeScript data file. My sandbox can't reach the live site, by the way.",
+      "expected_output": "Reads the renderer first and finds which of the draft's constructs it supports, converts the numbered list to the renderer's supported form (or offers a renderer patch as a separate PR), downgrades the pull quote to a paragraph, drops the video entirely and keeps the table in pipe syntax, checks the body for backticks, ${ and backslashes, applies in place, runs the gates, discloses every drop and conversion in the PR body, and runs the live gate on pages fetched from the browser and saved, since the sandbox proxy blocks the site.",
+      "files": [],
+      "expectations": [
+        "Determines the supported subset from the renderer code instead of assuming CommonMark or HTML support",
+        "Converts the numbered list to supported bullets (or proposes a separate renderer PR) instead of shipping '1. ' into a paragraph",
+        "Drops the video embed without leaving a bare URL and downgrades the blockquote to a plain paragraph",
+        "Checks the body is safe inside a template literal and that the file's backtick count stays even after the edit",
+        "Lists every lossy conversion (the dropped video, the downgraded quote, the converted list) in the PR body",
+        "Treats a sandbox proxy 403 as a tooling limit, not a failed deploy, and runs the live checks on pages fetched from the browser (verify_publish.py html)",
+        "Confirms the production deploy reached Ready and the live counts match the renderer gate's prediction"
+      ]
+    }
+  ]
+}

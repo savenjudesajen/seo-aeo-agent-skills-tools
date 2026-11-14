@@ -1,0 +1,50 @@
+{"skill_name": "competitor-overview-page-structure", "evals": [
+  {"id": 1,
+   "prompt": "Crewdock (crewdock.example.com) sells field-service scheduling software. Their in-house web team runs the site on WordPress and wants a /compare page covering the seven tools prospects mention most on sales calls. Can you recommend the page structure, with wireframes, and say which comparisons it should launch with?",
+   "expected_output": "A .docx page structure recommendation: five or six decisions, a 27-block order table with stage, status, a count with its base and best examples, wireframes, a section 5 subsection per block with captioned benchmark figures and spec rows, the launch set of comparison pages, navigation and URLs, CMS fields mapped to WordPress, build checks, appendices with the section library, plus a drafted reply to the web team that is not sent.",
+   "files": [],
+   "expectations": [
+     "Inventories whatever comparison content Crewdock already has (pages, posts, sales material) before benchmarking",
+     "Benchmarks a client set (the named tools plus field-service peers) for navigation and a cross-industry set (the public sample, minus any hub in or near field-service software, plus review publishers from unrelated categories) for page structure, and keeps navigation counts inside the client set",
+     "Codes every hub against the 45 section types and shows that every type lands in a block or has a Not used reason",
+     "Sets every block status against Crewdock's live site, prints the tally from the script, and gives every count its base",
+     "Recommends a fair posture: a Best for niche per rival, a row each rival leads, Crewdock's own limits, dated and numbered sources, a disclosure line, names in text and no rival logos",
+     "Chooses a launch set from the seven by demand and by which rivals target Crewdock rather than launching all seven by default, and places the hub at /compare with pages at /compare/crewdock-vs-<rival>",
+     "Translates the CMS field model and limits to WordPress instead of copying another platform's notes, and states no Review or AggregateRating markup",
+     "Runs block_model.py and qc_copy.py and reports 0 copy hits before presenting, and drafts the reply without sending it"
+   ]},
+  {"id": 2,
+   "prompt": "Quick one: should Inboxly (inboxly.example.com, an email deliverability tool) give competitors their own top-level menu tab? They have three vs pages and no hub.",
+   "expected_output": "A short, evidenced answer: no top-level Compare item; publish a /compare hub, link it from the product menu or a Why menu if they have one, and add a footer Compare group naming the main rivals then All comparisons; with the counts and their bases from the benchmark and an offer to produce the full page structure document.",
+   "files": [],
+   "expectations": [
+     "Answers no to a top-level tab and gives the placement that peers use (product or Why menu, footer Compare group)",
+     "Backs the answer with counts that name their base, read from Inboxly's own competitor set for navigation (not only the SaaS reference rows)",
+     "Recommends a hub at /compare so the three existing vs pages have a parent, and launching any new comparison pages on the same day as the hub",
+     "Mentions the follow-on page types (alternatives pages, rival-versus-rival pages, a switch page) only as later steps",
+     "Does not invent counts: says when the client set has not been read yet"
+   ]},
+  {"id": 3,
+   "prompt": "Lingopath (lingopath.example.com, a language-learning app for companies) has three old blog posts, each comparing Lingopath with one rival, and a sales one-pager that rates it against them. Plan a comparison hub that brings this together and tell us what has to be corrected before anything is reused.",
+   "expected_output": "A recommendation that turns the posts and one-pager into a /compare hub plus one comparison page per rival, lists the errors to correct before reuse, each with its corrected line, decides what happens to the old posts (redirect, update or keep with a link to the hub), and sets block statuses from what actually exists on the site.",
+   "files": [],
+   "expectations": [
+     "Records each post's rival, the criteria compared, any statistics and their sources and CTA labels, and checks each statistic against the report it cites",
+     "Marks a block Rework only where its content already exists on the site in another form, and explains each status from the inventory",
+     "Replaces any ratings or symbols with one short sentence per cell with a numbered source and a last-reviewed date, and adds a ratings row only with site, count and date",
+     "Settles whether the product replaces or works beside each rival using the product page's own words, and builds the fit block from that",
+     "Decides the fate of the three old posts so they do not compete with the new comparison pages (redirect or update, linked to the hub), using the client's own search-query data before choosing",
+     "Writes card and verdict examples that concede each rival a niche before saying where Lingopath differs, with no put-down wording"
+   ]},
+  {"id": 4,
+   "prompt": "Reviewer round on the Crewdock comparison hub doc came back saying a few counts look off and one block is called two different things. Fix it and get it ready to send to the web team.",
+   "expected_output": "Counts regenerated from the block model with each base stated, the block renamed consistently in all places, captions re-checked against images, gates re-run, and a reply drafted for the web team awaiting the user's yes.",
+   "files": [],
+   "expectations": [
+     "Regenerates every count from block_model.py and public_sample.py instead of editing numbers by hand, and states each base",
+     "Applies one block name across the order table, wireframe label, jump-link text, anchor, spec row and the Appendix B landing map",
+     "Re-reads every caption against its image and crops out anything the caption does not discuss",
+     "Asks the user before running another reviewer round",
+     "Re-runs block_model.py, qc_copy.py and build_hub_doc.py (no placeholder warnings) before presenting, and does not send the reply without an explicit yes"
+   ]}
+]}

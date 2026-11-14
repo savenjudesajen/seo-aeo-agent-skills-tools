@@ -1,0 +1,51 @@
+{
+  "skill_name": "aeo-strategy-audit-deck-and-client-roadmap",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run a full AEO strategy audit for ExampleCo Coastal Hotels (hotels.example.com), a small group of boutique coastal hotels that takes direct bookings. They named no competitors. They have no deck template. I need the long deck, the condensed deck for their marketing director, both workbooks and a 12-month roadmap.",
+      "expected_output": "A long-form deck and a condensed deck of 15 slides or fewer, a strategy workbook (Content Workbook tabs, Topic Summary, Content Plan, Proprietary Data Opps, Competitor Data Assets, Scorecard, content calendar), a separate technical workbook, and a roadmap workbook with Month 1..12 headers. The competitor set is derived and validated, the prompt set is seeded from real queries and the keyword gap, the executive summary shows a readiness index out of 100 with five dimension scores traced to the Scorecard sheet, the roadmap leads with content, and both deck gates pass.",
+      "files": [],
+      "expectations": [
+        "Probes each needed tool first and names any missing one with the options from the Tools section instead of substituting silently",
+        "Derives a two-tier competitor set (peer cohort and adjacent incumbents) from review-site category placement and AI co-mentions, and validates each domain",
+        "Pulls both top pages and organic positions for every comparator and computes brand vs non-brand share of traffic before making any demand claim",
+        "Seeds the prompt set from Search Console 4+ word queries and every keyword-gap theme with volume, checks the trust cluster, and tracks about 50 non-branded prompts across the funnel",
+        "Runs a full crawl with structured-data extraction and crawl analysis configured, and verifies schema from raw HTML with a sitewide sitemap count",
+        "Builds the Topical Authority Map as a per-theme table with verdicts plus a demand vs AI-presence chart, backed by a Topic Summary sheet with live formulas",
+        "Executive summary shows the readiness index out of 100 as the sum of five dimension scores, each the average of its measured ratios x 20 documented on the Scorecard sheet",
+        "Roadmap and 90-day plan lead with content decisions (keyword and prompt sign-off, page map, calendar); schema and speed rank Medium; months read Month 1..N",
+        "Runs verify_deck.py on the condensed deck and dedupe_audit.py on both decks until they pass, and renders the slides to check layout by eye"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Reuse a previous AEO audit deck structure for a new client: ExampleCo Plants (plants.example.com), a houseplant subscription service. Here is the reference deck's slide list. Their SEO tool says has_micromarkup is false on every page, so I assume they have no schema. Also their keyword tool's API is out of units.",
+      "expected_output": "A deck that matches the reference deck slide for slide, with schema verified from raw HTML rather than the tool flag (reporting what is present before what is missing), competitor exports pulled through the keyword tool's web UI instead of the API, and every slide meeting the depth bar.",
+      "files": [],
+      "expectations": [
+        "Lists the reference deck's slide types and makes every type exist in the new deck in the same format, merging rather than appending new slides",
+        "Explains that has_micromarkup tracks Microdata, not JSON-LD, and runs check_schema_raw_html.js (page and sitemap modes) before writing any schema finding",
+        "Reports schema that IS present before what is missing and pitches enrichment rather than claiming schema is invisible to AI",
+        "Treats the keyword tool as API-dead but UI-alive and pulls top pages, positions and the keyword gap through the web UI, handling export quirks",
+        "BLUF audit covers the top 25 pages by traffic with each page opened, not a sample of five",
+        "Share-of-voice scoreboard ranks brands across 20 or more non-branded prompts and leads with where the client loses",
+        "No incomplete-status wording or tool names appear on slides; data gaps are raised with the reviewer in chat"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "The audit deck for ExampleCo Kitchen (kitchen.example.com), a small-kitchen-appliance brand, is drafted. Before it goes to the client: tidy the writing, check nothing is duplicated after three competitor slides were added in a later pass, and build the roadmap workbook from scratch since they have no template.",
+      "expected_output": "A QC pass on the deck (em dash, 'not X but Y', stock vocabulary, tool names, grounding, layout, incomplete-status search), a dedupe_audit.py run with each duplicate resolved by deleting, repurposing or splitting by altitude, and a default roadmap workbook (Intake, a Plan with a monthly Month 1..12 timeline, a Tracker) with the content workstream first.",
+      "files": [],
+      "expectations": [
+        "Runs the writing QC sweep from writing-and-voice.md, including the em-dash, comparative-cadence, stock-vocabulary and tool-name passes",
+        "Moves internal mechanics and caveats into presenter notes instead of deleting them, and keeps the slide face client-ready",
+        "Runs dedupe_audit.py, reconciles the new competitor slides against existing ones, and re-runs until it reports clean",
+        "Fixes are applied in the build script and the deck rebuilt from clean rather than hand-patched",
+        "Builds the default roadmap workbook with an Intake sheet, a Plan with a monthly Month 1..12 timeline and a Tracker, loading with openpyxl defaults so formulas survive",
+        "The Plan opens with content and page-map items in Month 1, and formulas recalculate with zero errors"
+      ]
+    }
+  ]
+}
