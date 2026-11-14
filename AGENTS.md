@@ -70,6 +70,15 @@ Ask the user first, and install only from this repository. Use the command for y
 - **No shell (claude.ai, Claude Desktop):** tell the user to download the skill's zip from
   Releases and upload it under **Customize → Skills**.
 
+## If a user wants client context and the research tools in one connection
+
+Every skill runs without Unilytics. If the user asks to connect it, the Unilytics MCP is
+`https://mcp.unilytics.ai/mcp` (streamable HTTP; the user signs in in their browser, with no key to
+copy). Follow [unilytics.ai/setup.md](https://unilytics.ai/setup.md). It connects to Claude today
+(claude.ai, Claude Desktop, Claude Code). With it connected, you can read each client's Brand
+Context, tracked keywords and prompts, and call the keyword, SERP, crawl and AI-answer tools the
+Tools sections name. The setup page for the user: https://unilytics.ai/docs/connect/.
+
 ## How to run a skill
 
 1. Read `SKILL.md` in full. Follow the steps in order; don't skip, merge or condense them.
