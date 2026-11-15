@@ -1,7 +1,7 @@
 {
   "name": "seo-aeo-skills",
   "displayName": "SEO & AEO Agent Skills",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SEO and AEO skills for AI agents, with gate scripts that check the output",
   "author": {
     "name": "Saven Jude Sajen",

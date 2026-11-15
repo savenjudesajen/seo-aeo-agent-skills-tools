@@ -8,11 +8,20 @@ Usage:
 Checks (each finding is an issue; exit 1 if any, exit 0 when clean):
   1. repeated substantive strings across slides (same >25-char block on two slides)
   2. near-duplicate slides (>45% overlap of distinctive words)
+     Checks 1 and 2 skip slide chrome: footer, date and slide-number placeholders, and any
+     ungrouped text shape whose top edge is in the footer band (the bottom 1/15 of the slide:
+     at or below the footer rule add_chrome draws). Chrome repeats on every slide by design.
+     Every other check still reads it.
+     Chart text (categories, series names, titles of native charts) is read by checks 3-8;
+     brand names repeat across charts by design, so checks 1 and 2 skip it.
   3. stale status or placeholder text (TODO, TBD, lorem, "awaiting access", ...)
   4. em or en dashes in slide text or speaker notes
   5. stock AI vocabulary in slide text or speaker notes
   6. "not just X but Y" cadence in slide text
-  7. tool or vendor names in slide text (AI engine names are allowed)
+  7. tool or vendor names in slide text (AI engine names are allowed). When the brands the
+     audit tracks are themselves tool vendors (an AEO or SEO tools category), pass each
+     tracked brand with --allow-tool: they are the data on the slides, not tool credits.
+     An allowed name also allows a listed tool name it contains ("Peec AI" allows "Peec").
   8. stale client names passed with --stale (slides and notes)
   9. slides without speaker notes
  10. hardcoded page numbers that do not match the slide position
@@ -97,21 +106,77 @@ def _tx_body(el):
     return found[0] if found else None
 
 
-def _shapes(root):
-    """Yield (kind, text, is_slide_number_field) for text shapes and table cells."""
-    for el in root.iter():
+CHROME_PLACEHOLDERS = {"ftr", "dt", "sldNum"}  # footer, date, slide number
+# The footer band is the bottom 1/15 of the slide (0.5 in of a 7.5 in slide): where deck_helpers.add_chrome
+# draws the footer rule, footer text and page number. Kept as a ratio of integers so the rule's own top edge
+# (exactly 14/15 of the height) counts, with no float rounding.
+FOOTER_BAND_NUM, FOOTER_BAND_DEN = 1, 15
+
+
+def _shape_top(sp):
+    """The shape's own top offset (spPr/xfrm/off@y) in EMU, or None when it inherits its position."""
+    for sp_pr in _children(sp, "spPr"):
+        for xfrm in _children(sp_pr, "xfrm"):
+            for off in _children(xfrm, "off"):
+                try:
+                    return int(off.get("y"))
+                except (TypeError, ValueError):
+                    return None
+    return None
+
+
+def _is_chrome(sp, slide_height, grouped):
+    """Footer, date or slide-number placeholder, or an ungrouped text shape whose top is in the footer band.
+
+    A shape inside a group has its offset in the group's own coordinates, not the slide's, so only the
+    placeholder rule applies to it.
+    """
+    for nv in _children(sp, "nvSpPr"):
+        for ph in _descendants(nv, "ph"):
+            if ph.get("type") in CHROME_PLACEHOLDERS:
+                return True
+    if grouped or not slide_height:
+        return False
+    top = _shape_top(sp)
+    return top is not None and top * FOOTER_BAND_DEN >= slide_height * (FOOTER_BAND_DEN - FOOTER_BAND_NUM)
+
+
+def _shapes(root, slide_height=None):
+    """Yield (kind, text, is_slide_number_field) for text shapes and table cells.
+
+    kind: "chrome" for footer-band text and footer/date/slide-number placeholders (see _is_chrome),
+    "shape" for every other text shape, "cell" for table cells.
+    """
+    def walk(el, grouped):
         tag = _local(el.tag)
         if tag == "sp":
             body = _tx_body(el)
-            if body is None:
-                continue
-            is_field = any(f.get("type") == "slidenum" for f in _descendants(body, "fld"))
-            yield "shape", _body_text(body), is_field
-        elif tag == "tbl":
+            if body is not None:
+                is_field = any(f.get("type") == "slidenum" for f in _descendants(body, "fld"))
+                kind = "chrome" if _is_chrome(el, slide_height, grouped) else "shape"
+                yield kind, _body_text(body), is_field
+            return
+        if tag == "tbl":
             for tc in _descendants(el, "tc"):
                 body = _tx_body(tc)
                 if body is not None:
                     yield "cell", _body_text(body), False
+            return
+        for child in el:
+            for item in walk(child, grouped or tag == "grpSp"):
+                yield item
+
+    for item in walk(root, False):
+        yield item
+
+
+def _chart_text(root):
+    """The text a native chart shows: string category and series names, titles, axis titles."""
+    parts = []
+    for cache in _descendants(root, "strCache"):
+        parts += [v.text or "" for v in _descendants(cache, "v")]
+    parts += [t.text or "" for t in _descendants(root, "t")]  # rich text: chart and axis titles
+    return "\n".join(p for p in parts if p.strip())
 
 
 def _notes_text(root):
@@ -131,15 +196,20 @@ def load_deck(path):
     with zipfile.ZipFile(path) as z:
         pres = "ppt/presentation.xml"
         pres_rels = _rels(z, pres)
+        pres_root = _read_xml(z, pres)
+        sizes = _descendants(pres_root, "sldSz")
+        slide_height = int(sizes[0].get("cy")) if sizes and sizes[0].get("cy", "").isdigit() else None
         slides = []
-        for i, sid in enumerate(_descendants(_read_xml(z, pres), "sldId"), 1):
+        for i, sid in enumerate(_descendants(pres_root, "sldId"), 1):
             _, part = pres_rels[_rel_id(sid)]
             root = _read_xml(z, part)
-            texts = list(_shapes(root))
+            texts = list(_shapes(root, slide_height))
             notes = ""
-            for typ, target in _rels(z, part).values():
+            for typ, target in sorted(_rels(z, part).values(), key=lambda r: r[1]):
                 if typ.endswith("/notesSlide") and target in z.namelist():
                     notes = _notes_text(_read_xml(z, target))
+                elif typ.endswith("/chart") and target in z.namelist():
+                    texts.append(("chart", _chart_text(_read_xml(z, target)), False))
             title = next((t.strip().split("\n")[0] for k, t, _ in texts if k == "shape" and t.strip()),
                          "(untitled)")
             slides.append({"index": i, "title": title, "texts": texts, "notes": notes})
@@ -147,6 +217,7 @@ def load_deck(path):
 
 
 def blocks(slide):
+    """Substantive text blocks for checks 1 and 2: shapes over 40 characters, cells over 12. Not chrome."""
     out = []
     for kind, text, _ in slide["texts"]:
         t = text.strip().lower()
@@ -170,12 +241,14 @@ def main(argv=None):
     ap.add_argument("--stale", action="append", default=[], help="previous client name to catch (repeatable)")
     ap.add_argument("--tool", action="append", default=[], help="extra tool/vendor name to forbid (repeatable)")
     ap.add_argument("--allow-tool", action="append", default=[],
-                    help="tool name the client asked to see on slides (repeatable)")
+                    help="tool or vendor name allowed on slides (repeatable): a brand in the tracked set, "
+                         "or a tool the client asked to see")
     args = ap.parse_args(argv)
 
     slides = load_deck(args.deck)
-    allowed = {t.lower() for t in args.allow_tool}
-    tools = [t for t in DEFAULT_TOOLS + args.tool if t.lower() not in allowed]
+    # An allowed name allows each listed tool name it contains as a word: "Peec AI" allows "Peec".
+    allowed = [a for a in args.allow_tool if a.strip()]
+    tools = [t for t in DEFAULT_TOOLS + args.tool if not any(word_rx(t).search(a) for a in allowed)]
     tool_rx = [(t, word_rx(t)) for t in tools]
     vocab_rx = [(v, word_rx(v)) for v in STOCK_VOCAB]
     stale_rx = [(s, word_rx(s)) for s in args.stale if s.strip()]
@@ -227,7 +300,7 @@ def main(argv=None):
             add("9 missing notes", "s%d '%s'" % (i, s["title"][:40]))
         for kind, text, is_field in s["texts"]:
             t = text.strip()
-            if kind == "shape" and not is_field and t.isdigit() and len(t) <= 2 and int(t) != i:
+            if kind in ("shape", "chrome") and not is_field and t.isdigit() and len(t) <= 2 and int(t) != i:
                 add("10 page number", "s%d shows '%s'" % (i, t))
 
     if not issues:
