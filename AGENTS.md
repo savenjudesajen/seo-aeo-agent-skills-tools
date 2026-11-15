@@ -114,3 +114,10 @@ Tools sections name. The setup page for the user: https://unilytics.ai/docs/conn
 - Run every gate against its eval fixtures before opening a pull request. A gate must pass good
   output and fail bad output.
 - Sign off commits: `git commit -s`.
+- Maintainers: turn on the pre-push check once per clone
+  (`bash tools/public-content-scan/install-hook.sh <key file>`). Never push with `--no-verify`.
+  A failed check means rewrite the text it points to; never add an exception without the owner's OK.
+- A pull request from a fork runs its own copy of the workflow, so its public-content result proves
+  nothing either way. Before merging one, fetch it (`git fetch origin pull/<n>/head`) and run
+  `node tools/public-content-scan/scan.mjs tree FETCH_HEAD` yourself, and review any change to
+  `tools/public-content-scan/` or `.github/` line by line.

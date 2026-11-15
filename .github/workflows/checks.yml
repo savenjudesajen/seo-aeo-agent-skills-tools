@@ -2,14 +2,27 @@ name: checks
 
 on:
   push:
-    branches: [main]
+    branches: ["**"]
+    tags: ["**"]
   pull_request:
+    types: [opened, edited, synchronize, reopened]
+  release:
+    types: [published, edited]
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+    inputs:
+      history:
+        description: Also read every commit and tag ever reachable (after the word list changes)
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
 jobs:
   repo:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -18,3 +31,39 @@ jobs:
           persist-credentials: false
       - name: Skill format and versions
         run: python3 tools/check_repo.py
+
+  # The public-content check (tools/public-content-scan/scan.mjs). With no secrets (a fork's PR) it stops with exit 2
+  # and fails: a maintainer runs it on that PR locally. It never passes without having read everything.
+  public-content:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Full history: the check reads every commit a push or PR adds. The read-only token lets it fetch origin's refs.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - name: Source access (read-only deploy key)
+        env:
+          SOURCE_KEY: ${{ secrets.PUBLIC_SCAN_SOURCE_KEY }}
+        run: |
+          umask 077
+          printf '%s\n' "$SOURCE_KEY" > "$RUNNER_TEMP/source_key"
+          # GitHub's published host key (api.github.com/meta), so the connection can't be redirected.
+          echo "github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl" > "$RUNNER_TEMP/known_hosts"
+      - name: Public-content check
+        env:
+          PUBLIC_SCAN_KEY: ${{ secrets.PUBLIC_SCAN_KEY }}
+          PUBLIC_SCAN_SOURCE_URL: git@github.com:TeamUnilytics/unilytics-site.git
+          GIT_SSH_COMMAND: ssh -i ${{ runner.temp }}/source_key -o IdentitiesOnly=yes -o UserKnownHostsFile=${{ runner.temp }}/known_hosts -o StrictHostKeyChecking=yes
+        run: |
+          node tools/public-content-scan/scan.mjs github
+          # The pinned matcher for the check's own tests, fetched while the key is here.
+          mkdir -p "$RUNNER_TEMP/matcher"
+          node tools/public-content-scan/scan.mjs export-matcher "$RUNNER_TEMP/matcher"
+      # Before the tests: they run this branch's code, which needs no access to the source.
+      - name: Remove the deploy key
+        if: always()
+        run: rm -f "$RUNNER_TEMP/source_key"
+      - name: Check's own tests
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        run: PUBLIC_SCAN_MATCHER="$RUNNER_TEMP/matcher/client-names.mjs" node --test tools/public-content-scan/scan.test.mjs
