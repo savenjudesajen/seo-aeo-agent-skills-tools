@@ -1,0 +1,4 @@
+#!/bin/sh
+# Runs the public-content check on everything this push would publish (tools/public-content-scan/scan.mjs).
+# Installed by tools/public-content-scan/install-hook.sh. Exit 1 (found) and 2 (couldn't run) both stop the push.
+exec node "$(git rev-parse --show-toplevel)/tools/public-content-scan/scan.mjs" pre-push "$@"

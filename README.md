@@ -229,16 +229,15 @@ data tools (vendor APIs or Unilytics credits).
 ## About the author
 
 I'm [Saven Jude Sajen](https://github.com/savenjudesajen), founder of UnivSense, a digital marketing agency working with partners across
-the US. I'm also an AI Engineer on the marketing team at AirOps.
+the US. I also work as an AI engineer on a marketing team.
 
-Before that I was an SEO Manager at Neil Patel Digital, running SEO for some of the biggest
-enterprises, then worked at Incubeta (acquired by Carlyle) and Wellington Management.
+Before that I ran SEO for large enterprises as an SEO manager, and worked in agency and in-house
+marketing roles.
 
-These skills are those seven years, written down for agents. Every time I work with a client, I
-turn what I learn into strategy, bake it into the skill so it runs automatically, and take it to
-the next client. That's why the most-used skill here is past its 95th version. They carry more
-than method: the expectations of the toughest CMOs, and the cost and tooling trade-offs, so anyone
-with a few standard tools can run them.
+These skills are those seven years of SEO and AEO practice, written down for agents. Each one keeps
+improving as I use it: the most-used skill here is past its 95th version. They carry more than
+method: the quality bar senior marketing leaders hold work to, and the cost and tooling trade-offs,
+so anyone with a few standard tools can run them.
 
 I hope they help grow the next wave of SEO and AEO experts.
 
@@ -249,3 +248,8 @@ If a skill saves you time, star the repo. It's how other consultants find it.
 [Apache-2.0](LICENSE). If you redistribute or modify the skills, keep the [NOTICE](NOTICE) file
 and mark the files you changed. Issues and pull requests are welcome; sign off your commits
 (`git commit -s`). Security: see [SECURITY.md](SECURITY.md).
+
+Every push and pull request runs a public-content check
+([tools/public-content-scan](tools/public-content-scan/scan.mjs)) against a word list the maintainers
+keep private. A pull request from a fork shows that check as failed until a maintainer runs it; that's
+expected, and the maintainer tells you if anything needs rewording.
