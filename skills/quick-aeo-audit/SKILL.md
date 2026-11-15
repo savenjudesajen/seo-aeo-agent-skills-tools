@@ -15,7 +15,7 @@ license: Apache-2.0
 metadata:
   title: "Quick AEO Audit"
   author: Saven Jude Sajen
-  version: "1.0.0"
+  version: "1.0.1"
   revisions: "3"
   repository: https://github.com/savenjudesajen/seo-aeo-agent-skills-tools
   homepage: https://unilytics.ai/skills/quick-aeo-audit/
@@ -79,7 +79,10 @@ client), not perception.
 - Client-facing voice: zero em dashes and en dashes, no "not X but Y" cadence,
   no stock AI vocabulary (leverage, robust, seamless, unlock, elevate, delve,
   game-changer and similar), and no tool or vendor names in body copy. AI engine
-  names (ChatGPT, Claude, Perplexity, Gemini) are fine: they are the subject.
+  names (ChatGPT, Claude, Perplexity, Gemini) are fine: they are the subject. So
+  are the brands in the tracked set, even when they are tool vendors (an AEO or
+  SEO tools category): they are the data. Pass each one to the gate with
+  `--allow-tool`.
 - Show the GAP, not the win. A slide built on a prompt where the client is
   already number 1 makes the client ask why they need AEO.
 - Adding a slide is a merge, not an append: reconcile new content against what
@@ -135,13 +138,18 @@ Save as `prompt_universe.json`.
 ### Phase 4 - AI-visibility baseline (in waves)
 
 For every non-branded prompt and every brand in the set, record whether each
-engine (ChatGPT, Claude, Perplexity at minimum) names the brand, how often, and
-how early in the answer. Run in waves of ~20-24 parallel checks. Treat a dropped
+engine (ChatGPT, Claude, Perplexity at minimum) names the brand and how early in
+the answer (and how often, where your tool reports a count). Run in waves of
+~20-24 parallel checks. Treat a dropped
 call as a retry, never as a data point. Pass every brand in the set on each check:
 a brand left out of a check isn't reported, so share of voice needs all of them on
-every call. Leave any sentiment score out of the deck: a tool can return one for an
-answer that never named the brand. A definitional prompt that returns zero
-vendors for every brand is a confirmed open goal.
+every call. With a tool that takes the client plus a list of competitors (the
+Unilytics MCP `brand_visibility`: `brand` plus up to 20 `competitors`), that is ONE
+call per prompt, not one per (prompt, brand); a set over 21 brands takes a second
+call on the same prompt (`reference/gotchas.md` #10). Leave any sentiment score out
+of the deck: a tool can return one for an answer that never named the brand. A
+definitional prompt that returns zero vendors for every brand is a confirmed open
+goal.
 
 Compute per-brand, per-engine hits, then:
 - per-platform visibility % (a Platform x Brand table),
@@ -168,6 +176,12 @@ Detail and click-paths: `reference/keyword-gap-and-top-pages.md`. Pull:
   incumbent authority is often BRAND-driven (sign-in, account and app pages), not
   content-driven, which is why the category is winnable.
 
+No SEO-suite export? Build the keyword gap from Google's top 20 results for each
+category keyword: the keywords where the client's domain is absent and a
+competitor's (or a third-party list) ranks are the gap. Competitor top pages has no
+substitute: leave that optional slide out and tell the reviewer why
+(`reference/keyword-gap-and-top-pages.md`, "Without an SEO-suite export").
+
 ### Phase 6 - Build the deck
 
 Path A, the client has a template: copy it and EDIT IN PLACE with python-pptx.
@@ -184,9 +198,11 @@ Either way, follow every item in `reference/gotchas.md`. Helpers:
 
 ### Phase 7 - Charts, tables and extra insight slides
 
-Clients respond to charts. Build them with `data/sov_chart.py` (matplotlib) in
-the neutral palette, or swap the palette constants for the client's brand colours
-if their template has them:
+Clients respond to charts. Build them as native PowerPoint charts with
+`add_bar_chart` in `data/deck_helpers.py`: brand names and values stay text in the
+deck and its PDF, and the gate checks them. Use `data/sov_chart.py` (matplotlib PNGs) only to fill a
+template's picture frame (path A). Both use the neutral palette; swap the constants
+for the client's brand colours if their template has them:
 - Category share of voice horizontal bar (client highlighted in the accent
   colour, competitors grey). This is the signature chart.
 - Keyword gap by theme horizontal bar.
@@ -233,8 +249,12 @@ in the deck.
    "awaiting access"), em and en dashes, stock AI vocabulary, tool or vendor
    names in slide text, stale client names, missing speaker notes, and page
    numbers that do not match slide positions. Pass every other tool or MCP
-   server name you used with `--tool "<name>"` so it is caught too. Standard
-   library only, offline.
+   server name you used with `--tool "<name>"` so it is caught too, and each
+   tracked brand that is also on its tool list with `--allow-tool "<name>"`
+   (Semrush, Ahrefs, Profound, Peec and Otterly are on it; the brand's full name
+   works too: `--allow-tool "Peec AI"` allows Peec). Footer text is read
+   as slide chrome: it is checked for dashes, vocabulary and tool names, never
+   as a repeated block. Standard library only, offline.
 3. By eye: screenshots intact, the previously invisible narrative shapes now
    visible, semantic colours correct (green = client owns it, red = competitor,
    amber = partial or open goal).
@@ -244,7 +264,9 @@ in the deck.
 - [ ] Deck renders clean; every number sourced; baseline labelled "directional,
       single-run".
 - [ ] ~50 non-branded prompts in the baseline, tagged by stage, metric and play.
-- [ ] Keyword gap and at least one competitor top-pages read from a real export.
+- [ ] Keyword gap from a real export, or from Google's top 20 per keyword when no
+      export is reachable (the method slide says which). Competitor top pages from
+      a real export, or the slide left out and the reviewer told why.
 - [ ] Signature charts present; prompt-performance table present.
 - [ ] Speaker notes on every slide, each with an insight for the call.
 - [ ] `data/deck_qc.py` exits 0; render checked by eye.
@@ -259,8 +281,8 @@ in the deck.
 | `reference/deck-layout.md` | Phase 6, path B (no client template) |
 | `reference/gotchas.md` | Always, before the deck build |
 | `reference/charts-and-tables.md` | Phase 7 |
-| `data/deck_helpers.py` | Phases 6-8 (python-pptx helpers) |
-| `data/sov_chart.py` | Phase 7 (chart generators, matplotlib) |
+| `data/deck_helpers.py` | Phases 6-8 (python-pptx helpers, native charts) |
+| `data/sov_chart.py` | Phase 7, path A (chart PNGs for a template's picture frame, matplotlib) |
 | `data/deck_qc.py` | QC gate, before every delivery |
 
 ## Tools
@@ -271,9 +293,9 @@ in the deck.
 | Scrape the client site | Firecrawl or any scraper; or the Unilytics MCP `content_scrape`, `site_map` or `batch_scrape`. |
 | Keyword volume, CPC, competition | Keywords Everywhere, DataForSEO, Semrush or Ahrefs; or the Unilytics MCP `keyword_research`. |
 | Prompt ideas and prompt volume | By hand from the seeds; optionally the Unilytics MCP `aeo_generate_prompts` and `aeo_prompt_volume`. |
-| AI visibility per prompt, brand and engine | A prompt-tracking tool (e.g. Profound, Peec AI), or querying the ChatGPT, Claude and Perplexity APIs yourself and parsing answers for brand names; or the Unilytics MCP `brand_visibility` (per engine: whether each brand you pass is named, and its position among the brands named; no answer text). |
-| Keyword gap | Semrush Keyword Gap or Ahrefs Content Gap (API or UI export). |
-| Competitor top pages | Semrush Organic Research Pages or Ahrefs Top Pages. |
+| AI visibility per prompt, brand and engine | A prompt-tracking tool (e.g. Profound, Peec AI), or querying the ChatGPT, Claude and Perplexity APIs yourself and parsing answers for brand names; or the Unilytics MCP `brand_visibility`: one call per prompt, the client as `brand` and up to 20 `competitors` (per engine: whether each brand is named and its position among the brands named, plus Perplexity's cited URLs; no answer text). |
+| Keyword gap | Semrush Keyword Gap or Ahrefs Content Gap (API or UI export). Without one: Google's top 20 results per category keyword, from any SERP API, or the Unilytics MCP `aeo_serp_urls` (Google US) or `serp_results` (any country, by `location_code`) (`reference/keyword-gap-and-top-pages.md`). |
+| Competitor top pages | Semrush Organic Research Pages or Ahrefs Top Pages. No other source: without an export, leave the optional slide out. |
 | Driving a vendor UI to export | A browser-automation tool such as Claude in Chrome. |
 | Deck build and charts | python-pptx, Pillow, matplotlib (Python packages). |
 | Render check | LibreOffice (`soffice`) and poppler (`pdftoppm`). |

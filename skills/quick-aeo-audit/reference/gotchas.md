@@ -82,14 +82,22 @@ with ": ", bare em or en dashes with "-", and any leftover previous-client name
 with the new client's name. Write build scripts in pure ASCII (hyphens only):
 some editors and pipelines truncate a file at a multibyte em dash.
 
-## 10. Visibility tools that return mention flags only
+## 10. Visibility tools that return no answer text
 
-Some AI-visibility tools return, per engine, only whether a given brand was
-mentioned, a mention count, a position and a sentiment: no answer text and no
-list of every brand named. Share of voice then REQUIRES one call per (prompt,
-brand). Position (where the first mention appears; earlier is better) supports
-the "good position, low frequency" insight: the client is named early when
-named at all, but named rarely.
+Some AI-visibility tools return, per engine, whether the brands you pass are
+named and their positions, but no answer text and no list of every brand named.
+Read how the tool takes brands before you plan the call count:
+- If it takes the client plus a list of competitors and reports each one in the
+  same answer (the Unilytics MCP `brand_visibility`: `brand` plus up to 20
+  `competitors`), share of voice is ONE call per prompt with the whole set. A set
+  over 21 brands takes a second call on the same prompt, and the two calls are
+  two different answers: count each brand from one call only.
+- If it takes one brand per call, share of voice needs one call per (prompt,
+  brand), and each call is a separate answer. That costs N brands times more,
+  and brands are never compared within one answer; say so in the method slide.
+Position (where the brand comes among the brands named; earlier is better)
+supports the "good position, low frequency" insight: the client is named early
+when named at all, but named rarely.
 
 ## 11. Keyword-gap top rows are a data trap
 
@@ -111,4 +119,12 @@ template's own chrome elements. Then reorder via the slide id list
 Render with LibreOffice and read every slide image. python-pptx will not catch
 text overflow, invisible text, collisions or a stretched replacement image.
 Generate replacement chart PNGs at the target frame's aspect ratio so they do not
-stretch.
+stretch. A title too long for one line wraps upward into the kicker: shorten it.
+
+## 14. Count cited domains after normalising them
+
+Answer engines that cite sources (Perplexity) cite the same site under several
+hosts (`example.com`, `www.example.com`, `blog.example.com`). Lower-case each
+host and strip `www.` and content subdomains such as `blog.` before counting
+"questions where the engine cited this domain", and count a domain once per
+question. Counted raw, one site shows up as two rows and its count can double.

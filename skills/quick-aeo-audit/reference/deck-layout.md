@@ -21,6 +21,14 @@ client gives you brand colours.
   accent rule under the title, optional client logo top-right, a thin grey rule
   above the footer, footer text left ("Confidential", optionally "Prepared for
   <Client>"), page number right.
+- Footer: short and the same on every slide, one line at 8pt
+  ("Confidential | Prepared for <Client>"). Leave the finding, the date range and
+  the method out of it: they belong on the method slide. The gate reads the
+  footer band as chrome, so a footer never counts as a repeated block, but it is
+  still checked for dashes, stock vocabulary and tool names.
+- Titles: one line at 24pt bold. Without a logo the title spans the content
+  width (about 70 characters); with a logo it stops short of it (about 60). A
+  longer title wraps upward into the kicker.
 - One message per slide. The title states the finding, not the topic
   ("AI names <Client> on 1 in N category questions", not "Share of voice").
 - Content slides that carry a finding end with a takeaway box (`add_takeaway`):
@@ -38,14 +46,14 @@ Core slides first; the optional ones go in only when the data supports them.
 | 3 | Method | Engines checked, prompt count by stage, brand set, "directional, single-run" label, date of the run | Phases 3-4 |
 | 4 | AI visibility today | The client's branded-inclusive number next to the non-branded baseline, with the reason they differ | Phase 1 + 4 |
 | 5 | Visibility by platform | Platform x Brand table (visibility % per engine per brand) | Phase 4 |
-| 6 | Category share of voice | Signature horizontal bar chart | Phase 4, `sov_bar` |
+| 6 | Category share of voice | Signature horizontal bar chart | Phase 4, `add_bar_chart` |
 | 7 | Prompt performance | Prompt / Stage / Who AI names today / Client? table, representative rows, gaps first | Phase 4 |
-| 8 | Keyword gap by theme | Theme bar chart of untapped search volume, brand terms excluded | Phase 5, `theme_bar` |
+| 8 | Keyword gap by theme | Theme bar chart of untapped search volume, brand terms excluded; the method says whether it came from an export or from top-20 search results | Phase 5, `add_bar_chart` |
 | 9 | Open goals and plays | Prompts where AI names no vendor, grouped by play (Defend / Strengthen / Capture) | Phases 3-4 |
 | 10 | Recommended next steps | 3-5 actions in priority order, each tied to a play and a slide above | All |
 | opt | Head to head | Versus verdicts: for each "client vs competitor" prompt, who AI favours and why | Phase 4 |
 | opt | Narrative alignment | What the client says about itself (owned) vs what AI repeats about it (earned), aligned / misaligned per claim | Phase 1 + 4 |
-| opt | Competitor top pages | Top-5-pages Pareto with page-type labels | Phase 5, `pareto_bar` |
+| opt | Competitor top pages | Top-5-pages Pareto with page-type labels; only from a top-pages export | Phase 5, `add_bar_chart(..., horizontal=False)` |
 | opt | Appendix | Full prompt list with tags, method notes, data sources (described generically, no vendor names in body copy) | Phases 2-5 |
 
 Place optional slides next to the core slide they extend (head to head and
